@@ -31,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:16px;padding:14px 18px
 .peq{min-height:40px;padding:8px 12px;font-size:.85rem;border-radius:12px}
 .card{background:var(--card);border:1px solid var(--linha);border-radius:22px;padding:16px;margin:12px 0;box-shadow:var(--sombra)}
 label{display:block;font-weight:800;margin:14px 0 6px}
-input[type=text],input[type=password]{width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta)}
+input[type=text],input[type=password],input[type=tel]{width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta)}
 input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .ver-senha{display:flex;align-items:center;gap:10px;font-weight:700;margin:10px 0 4px;cursor:pointer;user-select:none}
 .ver-senha input{width:26px;height:26px;margin:0;accent-color:var(--prim-esc)}
@@ -53,6 +53,12 @@ input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .slogan{margin:.2em 0 .6em;color:var(--suave);font-weight:600}
 .bandeiras{display:inline-block;background:var(--card);border:1px solid var(--linha);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.9rem}
 .bandeiras .breve{color:var(--suave);font-weight:600}
+.abas{display:flex;background:var(--fundo);border:1px solid var(--linha);border-radius:14px;padding:4px;gap:4px}
+.abas button{min-height:42px;padding:6px 14px;border-radius:10px;background:none;color:var(--suave)}
+.abas button.on{background:var(--card);color:var(--tinta);box-shadow:var(--sombra)}
+.so-criar{display:none}.modo-criar .so-criar{display:block}
+.selo{font-size:.7rem;background:var(--verde2);color:var(--prim-esc);padding:2px 8px;border-radius:999px;vertical-align:middle}
+.selo.cinza{background:var(--linha);color:var(--suave)}
 .chip{background:var(--card);border:1px solid var(--linha);border-radius:999px;min-height:42px;padding:6px 14px;font-weight:800;box-shadow:var(--sombra);white-space:nowrap}
 .chip small{color:var(--suave);font-weight:700}
 /* início */
@@ -139,15 +145,31 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
     <div class="bandeiras">🇺🇸 Inglês <span class="breve">· 🇪🇸 🇫🇷 🇮🇹 em breve</span></div>
   </div>
   <div class="card">
-    <div class="topo"><h2 style="margin:0">Entrar</h2><button class="falar" id="lg-ouvir" title="Ouvir as instruções" aria-label="Ouvir as instruções">🔊</button></div>
+    <div class="topo"><div class="abas" role="tablist"><button class="on" data-m="entrar">Entrar</button><button data-m="criar">Criar conta</button></div><button class="falar" id="lg-ouvir" title="Ouvir as instruções" aria-label="Ouvir as instruções">🔊</button></div>
     <label for="lg-nome">Seu nome de usuário</label>
     <input type="text" id="lg-nome" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="Exemplo: maria123">
     <label for="lg-senha">Sua senha</label>
-    <input type="password" id="lg-senha" maxlength="30" autocomplete="current-password" placeholder="Pelo menos 4 letras ou números">
+    <input type="password" id="lg-senha" maxlength="30" autocomplete="current-password" autocapitalize="off" spellcheck="false" placeholder="Sua senha">
+    <p class="ajuda so-criar">Pelo menos <b>8 letras ou números</b>. Letra maiúscula ou minúscula tanto faz.</p>
     <label class="ver-senha"><input type="checkbox" id="lg-ver"> 👁️ Mostrar a senha</label>
+    <div class="so-criar">
+      <label for="lg-cel">Seu celular com DDD <span class="selo">recomendado</span></label>
+      <input type="tel" id="lg-cel" inputmode="numeric" autocomplete="tel" maxlength="16" placeholder="(11) 91234-5678">
+      <p class="ajuda">Usamos o celular para confirmar que é você quando entrar de outro aparelho.</p>
+      <label for="lg-cidade">Sua cidade <span class="selo cinza">opcional</span></label>
+      <input type="text" id="lg-cidade" maxlength="60" autocomplete="address-level2" placeholder="Exemplo: Guarulhos - SP">
+      <label class="ver-senha"><input type="checkbox" id="lg-sorteio"> 🎁 Quero participar de sorteios e receber novidades</label>
+      <p class="ajuda">Se marcar, guardamos seu usuário, celular e cidade para os sorteios.</p>
+    </div>
+    <div id="lg-confirma" style="display:none">
+      <label for="lg-cel2">📱 Confirme o número do seu celular</label>
+      <input type="tel" id="lg-cel2" inputmode="numeric" autocomplete="tel" maxlength="16" placeholder="(11) 91234-5678">
+      <p class="ajuda">É o celular que você cadastrou. Isso protege a sua conta.</p>
+    </div>
+    <label class="ver-senha"><input type="checkbox" id="lg-salvar" checked> 💾 Salvar minha senha neste aparelho</label>
+    <p class="ajuda" style="margin-top:0">Não marque se o celular ou computador for de outra pessoa.</p>
     <div class="msg" id="lg-msg"></div>
-    <button class="btn" id="lg-entrar">Entrar</button>
-    <button class="btn claro" id="lg-criar">Primeira vez? Criar minha conta</button>
+    <button class="btn" id="lg-ir">Entrar</button>
     <p class="ajuda">Anote seu nome de usuário e sua senha num papel. Você vai precisar deles para entrar de novo.</p>
   </div>
   <p class="centro ajuda">É de graça. 🚌💚</p>
@@ -581,10 +603,11 @@ async function servidor(dados){
 /* sem servidor: as contas ficam guardadas só neste aparelho */
 async function servidorLocal(d){
   let contas={};try{contas=JSON.parse(localStorage.getItem('nb_contas')||'{}');}catch(e){}
-  const k=d.nome.toLowerCase(),h=await hash(k+'|'+d.senha);
-  if(d.acao==='criar'){if(contas[k])return{ok:false,erro:'Esse nome de usuário já existe. Escolha outro, ou toque em Entrar.'};contas[k]={nome:d.nome,h};localStorage.setItem('nb_contas',JSON.stringify(contas));return{ok:true,nome:d.nome,progresso:null};}
+  const k=d.nome.toLowerCase(),h=await hash(k+'|'+String(d.senha).toLowerCase());
+  if(d.acao==='criar'){if(contas[k])return{ok:false,erro:'Esse nome de usuário já existe. Escolha outro, ou toque em Entrar.'};contas[k]={nome:d.nome,h,c:d.celular||''};localStorage.setItem('nb_contas',JSON.stringify(contas));return{ok:true,nome:d.nome,progresso:null};}
   if(!contas[k])return{ok:false,erro:'Não achei esse nome de usuário. Confira ou crie uma conta.'};
   if(contas[k].h!==h)return{ok:false,erro:'Senha errada. Confira e tente de novo.'};
+  if(contas[k].c){if(!d.celular)return{ok:false,precisaCelular:true,erro:'Para sua segurança, confirme o número do seu celular.'};if(contas[k].c.slice(-8)!==soDig(d.celular).slice(-8))return{ok:false,erro:'O celular não confere com o cadastro.'};}
   if(d.acao==='entrar')return{ok:true,nome:contas[k].nome,progresso:null};
   return{ok:true};
 }
@@ -593,38 +616,57 @@ function salvar(){
   salvaLocal();if(!SERVIDOR_URL||!USER)return;
   if(salvando){salvarDeNovo=true;return;}
   salvando=1;
-  servidor({acao:'salvar',nome:USER,senha:SENHA,progresso:CONTA}).catch(()=>{}).finally(()=>{salvando=0;if(salvarDeNovo){salvarDeNovo=false;salvar();}});
+  servidor({acao:'salvar',nome:USER,senha:SENHA,celular:CEL,progresso:CONTA}).catch(()=>{}).finally(()=>{salvando=0;if(salvarDeNovo){salvarDeNovo=false;salvar();}});
 }
+let MODO='entrar',CEL='';
+function setModo(m){MODO=m;document.querySelectorAll('.abas button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('#tela-login .card').classList.toggle('modo-criar',m==='criar');$('#lg-ir').textContent=m==='criar'?'Criar minha conta':'Entrar';
+  $('#lg-senha').placeholder=m==='criar'?'Pelo menos 8 letras ou números':'Sua senha';$('#lg-senha').autocomplete=m==='criar'?'new-password':'current-password';
+  $('#lg-confirma').style.display='none';msg('#lg-msg','');}
+document.querySelectorAll('.abas button').forEach(b=>b.onclick=()=>setModo(b.dataset.m));
+const soDig=t=>{let d=String(t||'').replace(/\D/g,'');if(d.length>=12&&d.startsWith('55'))d=d.slice(2);return d;};
+function mascara(inp){inp.oninput=()=>{const d=soDig(inp.value).slice(0,11);inp.value=d.length>6?`(${d.slice(0,2)}) ${d.slice(2,d.length-4)}-${d.slice(-4)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d;};}
+mascara($('#lg-cel'));mascara($('#lg-cel2'));
 function validaCampos(){
-  const nome=$('#lg-nome').value.trim(),senha=$('#lg-senha').value;
+  const nome=$('#lg-nome').value.trim(),senha=$('#lg-senha').value.trim().toLowerCase();
   if(nome.length<2)return msg('#lg-msg','Escreva um nome de usuário com pelo menos 2 letras.','erro'),null;
-  if(!/^[\p{L}\p{N} ._-]+$/u.test(nome))return msg('#lg-msg','Use só letras, números, espaço, ponto ou traço no nome.','erro'),null;
-  if(senha.length<4)return msg('#lg-msg','A senha precisa ter pelo menos 4 letras ou números.','erro'),null;
-  return {nome,senha};
+  if(MODO==='criar'){
+    if(!/^[\p{L}\p{N} ._-]+$/u.test(nome))return msg('#lg-msg','Use só letras, números, espaço, ponto ou traço no nome de usuário.','erro'),null;
+    if(senha.length<8)return msg('#lg-msg','A senha precisa ter pelo menos 8 letras ou números.','erro'),null;
+    if(!/^[a-z0-9]+$/.test(senha))return msg('#lg-msg','Use só letras e números na senha, sem espaço, acento ou símbolo.','erro'),null;
+    const cel=soDig($('#lg-cel').value);
+    if(cel&&(cel.length<10||cel.length>11))return msg('#lg-msg','Confira o celular: escreva o DDD e o número, por exemplo (11) 91234-5678.','erro'),null;
+    return {nome,senha,celular:cel,cidade:$('#lg-cidade').value.trim(),sorteio:$('#lg-sorteio').checked};
+  }
+  if(!senha)return msg('#lg-msg','Digite a sua senha.','erro'),null;
+  return {nome,senha,senhaOrig:$('#lg-senha').value.trim(),celular:soDig($('#lg-cel2').value)};   /* senhaOrig: só para contas da 1ª versão */
 }
-async function entrar(acao){
+function guardaSessao(lembrar){const v=JSON.stringify({n:USER,s:SENHA,c:CEL});
+  try{localStorage.removeItem('nb_sessao');sessionStorage.removeItem('nb_sessao');(lembrar?localStorage:sessionStorage).setItem('nb_sessao',v);}catch(e){}}
+async function entrar(){
   const c=validaCampos();if(!c)return;
+  const acao=MODO;
   msg('#lg-msg',acao==='criar'?'Criando sua conta…':'Entrando…');
-  $('#lg-entrar').disabled=$('#lg-criar').disabled=true;
+  $('#lg-ir').disabled=true;
   try{
-    const r=await servidor({acao,nome:c.nome,senha:c.senha});
+    const r=await servidor(Object.assign({acao},c));
+    if(r&&r.precisaCelular){$('#lg-confirma').style.display='';msg('#lg-msg',r.erro,'erro');$('#lg-cel2').focus();return;}
     if(!r||!r.ok)throw new Error((r&&r.erro)||'Não foi possível entrar.');
-    USER=r.nome||c.nome;SENHA=c.senha;
+    USER=r.nome||c.nome;SENHA=c.senha;CEL=c.celular||'';
     let local=null;try{local=JSON.parse(localStorage.getItem(chaveLocal(USER))||'null');}catch(e){}
     CONTA=normalizaConta(melhorConta(r.progresso,local));abreCurso(CONTA.idioma);
-    try{localStorage.setItem('nb_sessao',JSON.stringify({n:USER,s:SENHA}));}catch(e){}
-    salvar();$('#lg-senha').value='';msg('#lg-msg','');
+    guardaSessao($('#lg-salvar').checked);
+    salvar();$('#lg-senha').value='';$('#lg-cel2').value='';$('#lg-confirma').style.display='none';msg('#lg-msg','');
     inicio();
-    if(acao==='criar')modal(`<div style="font-size:3rem">🎉</div><h2>Conta criada!</h2><p>Bem-vindo(a), <b>${esc(USER)}</b>!</p><p>Você começa pelo <b>${CUR.bandeira} ${CUR.nome}</b>. Faça <b>uma lição por dia</b>: em poucos meses você vai entender e falar o básico.</p><p class="ajuda">Toque no 🔊 para ouvir as palavras quantas vezes quiser.</p><button class="btn" onclick="fechaModal()">Vamos começar!</button>`);
+    if(acao==='criar')modal(`<div style="font-size:3rem">🎉</div><h2>Conta criada!</h2><p>Bem-vindo(a), <b>${esc(USER)}</b>!</p><p>Você começa pelo <b>${CUR.bandeira} ${CUR.nome}</b>. Faça <b>uma lição por dia</b>: em poucos meses você vai entender e falar o básico.</p>${CEL?'':'<p class="ajuda">Você não cadastrou celular. Sem ele, qualquer pessoa que souber sua senha consegue entrar.</p>'}<p class="ajuda">Toque no 🔊 para ouvir as palavras quantas vezes quiser.</p><button class="btn" onclick="fechaModal()">Vamos começar!</button>`);
   }catch(e){msg('#lg-msg',e.message==='Failed to fetch'?'Sem internet. Verifique a conexão e tente de novo.':e.message,'erro');}
-  finally{$('#lg-entrar').disabled=$('#lg-criar').disabled=false;}
+  finally{$('#lg-ir').disabled=false;}
 }
-$('#lg-entrar').onclick=()=>entrar('entrar');
-$('#lg-criar').onclick=()=>entrar('criar');
-$('#lg-senha').onkeydown=e=>{if(e.key==='Enter')entrar('entrar');};
+$('#lg-ir').onclick=entrar;
+['#lg-senha','#lg-cel2'].forEach(k=>$(k).onkeydown=e=>{if(e.key==='Enter')entrar();});
 $('#lg-ver').onchange=e=>{$('#lg-senha').type=e.target.checked?'text':'password';};
-$('#lg-ouvir').onclick=()=>fala('Escreva o seu nome de usuário e a sua senha. Se for a primeira vez, toque em criar minha conta. Se já tem conta, toque em entrar. Marque mostrar a senha para ver o que você digitou.','pt-BR');
-$('#ini-sair').onclick=()=>{try{localStorage.removeItem('nb_sessao');}catch(e){}USER='';SENHA='';P=null;CONTA=null;tela('tela-login');};
+$('#lg-ouvir').onclick=()=>fala(MODO==='criar'?'Para criar sua conta, escolha um nome de usuário e uma senha com pelo menos oito letras ou números. Recomendamos colocar o número do seu celular com DDD: ele confirma que é você. Depois toque em criar minha conta.':'Escreva o seu nome de usuário e a sua senha e toque em entrar. Se for a primeira vez, toque em criar conta, lá em cima. Marque mostrar a senha para ver o que você digitou.','pt-BR');
+$('#ini-sair').onclick=()=>{try{localStorage.removeItem('nb_sessao');sessionStorage.removeItem('nb_sessao');}catch(e){}USER='';SENHA='';CEL='';P=null;CONTA=null;setModo('entrar');tela('tela-login');};
 
 /* ======================= INÍCIO ======================= */
 function inicio(){
@@ -895,14 +937,14 @@ function modal(h){$('#modal-corpo').innerHTML=h;$('#modal').classList.add('on');
 function fechaModal(){$('#modal').classList.remove('on');}
 
 /* ======================= ABRIR JÁ LOGADO ======================= */
-(function(){let s=null;try{s=JSON.parse(localStorage.getItem('nb_sessao')||'null');}catch(e){}
+(function(){let s=null;try{s=JSON.parse(localStorage.getItem('nb_sessao')||sessionStorage.getItem('nb_sessao')||'null');}catch(e){}
   usaCurso('en');
-  if(s&&s.n){$('#lg-nome').value=s.n;USER=s.n;SENHA=s.s;
+  if(s&&s.n){$('#lg-nome').value=s.n;USER=s.n;SENHA=s.s;CEL=s.c||'';
     let local=null;try{local=JSON.parse(localStorage.getItem(chaveLocal(USER))||'null');}catch(e){}
     CONTA=normalizaConta(local);abreCurso(CONTA.idioma);inicio();
-    if(SERVIDOR_URL)servidor({acao:'entrar',nome:USER,senha:SENHA}).then(r=>{
+    if(SERVIDOR_URL)servidor({acao:'entrar',nome:USER,senha:SENHA,celular:CEL}).then(r=>{
       if(r&&r.ok&&r.progresso){CONTA=normalizaConta(melhorConta(r.progresso,CONTA));abreCurso(CONTA.idioma);salvaLocal();if($('#tela-inicio').classList.contains('on'))inicio();}
-      else if(r&&r.sair){localStorage.removeItem('nb_sessao');USER='';P=null;CONTA=null;tela('tela-login');msg('#lg-msg',r.erro||'Entre de novo.','erro');}
+      else if(r&&(r.sair||r.precisaCelular)){localStorage.removeItem('nb_sessao');sessionStorage.removeItem('nb_sessao');USER='';P=null;CONTA=null;tela('tela-login');msg('#lg-msg',r.erro||'Entre de novo.','erro');}
     }).catch(()=>{});
   }})();
 </script>
