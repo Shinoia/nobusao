@@ -59,6 +59,7 @@ input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .so-criar{display:none}.modo-criar .so-criar{display:block}
 .selo{font-size:.7rem;background:var(--verde2);color:var(--prim-esc);padding:2px 8px;border-radius:999px;vertical-align:middle}
 .selo.cinza{background:var(--linha);color:var(--suave)}
+.versao{text-align:center;color:var(--suave);font-size:.75rem;letter-spacing:.08em;opacity:.8;margin:18px 0 0;font-variant-numeric:tabular-nums}
 .chip{background:var(--card);border:1px solid var(--linha);border-radius:999px;min-height:42px;padding:6px 14px;font-weight:800;box-shadow:var(--sombra);white-space:nowrap}
 .chip small{color:var(--suave);font-weight:700}
 /* início */
@@ -158,8 +159,6 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
       <p class="ajuda">Usamos o celular para confirmar que é você quando entrar de outro aparelho.</p>
       <label for="lg-cidade">Sua cidade <span class="selo cinza">opcional</span></label>
       <input type="text" id="lg-cidade" maxlength="60" autocomplete="address-level2" placeholder="Exemplo: Guarulhos - SP">
-      <label class="ver-senha"><input type="checkbox" id="lg-sorteio"> 🎁 Quero participar de sorteios e receber novidades</label>
-      <p class="ajuda">Se marcar, guardamos seu usuário, celular e cidade para os sorteios.</p>
     </div>
     <div id="lg-confirma" style="display:none">
       <label for="lg-cel2">📱 Confirme o número do seu celular</label>
@@ -172,7 +171,9 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
     <button class="btn" id="lg-ir">Entrar</button>
     <p class="ajuda">Anote seu nome de usuário e sua senha num papel. Você vai precisar deles para entrar de novo.</p>
   </div>
-  <p class="centro ajuda">É de graça. 🚌💚</p>
+  <p class="centro ajuda" style="margin-bottom:2px">É de graça, bb 🚌💚</p>
+  <p class="centro ajuda" style="margin-top:0">@cqcfoda</p>
+  <p class="versao"></p>
 </section>
 
 <!-- ============ IDIOMAS ============ -->
@@ -218,6 +219,7 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
     <label><input type="checkbox" id="cfg-lento"> 🐢 Voz do idioma mais devagar</label>
     <p class="ajuda" id="cfg-aviso"></p>
   </div>
+  <p class="versao"></p>
 </section>
 
 <!-- ============ LIÇÃO ============ -->
@@ -239,6 +241,8 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
    Cole aqui o endereço do Apps Script (termina em /exec).
    Enquanto estiver vazio, as contas ficam só neste aparelho. */
 const SERVIDOR_URL='https://script.google.com/macros/s/AKfycbyPSAod5ju4b09t2Ms8v2-U8bcy5kaubTBa4dtRsM-mmaWURaINmh8GgQRulmlVfEqkXA/exec';
+/* VERSÃO DO SITE (4 números). Suba 1 a cada atualização do site. Aparece no rodapé como SITE-PLANILHA, ex.: 0004-0004 */
+const VERSAO_SITE='0005';
 
 const CURSOS={};
 /* ===== INGLÊS ===== */
@@ -597,8 +601,8 @@ function abreCurso(cod){
 async function hash(t){try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))|0;return 'x'+h;}}
 async function servidor(dados){
   if(!SERVIDOR_URL)return servidorLocal(dados);
-  const r=await fetch(SERVIDOR_URL,{method:'POST',body:JSON.stringify(dados)});
-  return r.json();
+  const r=await fetch(SERVIDOR_URL,{method:'POST',body:JSON.stringify(Object.assign({vs:VERSAO_SITE},dados))});
+  const j=await r.json();if(j&&j.planilha)mostraVersao(j.planilha);return j;
 }
 /* sem servidor: as contas ficam guardadas só neste aparelho */
 async function servidorLocal(d){
@@ -636,7 +640,7 @@ function validaCampos(){
     if(!/^[a-z0-9]+$/.test(senha))return msg('#lg-msg','Use só letras e números na senha, sem espaço, acento ou símbolo.','erro'),null;
     const cel=soDig($('#lg-cel').value);
     if(cel&&(cel.length<10||cel.length>11))return msg('#lg-msg','Confira o celular: escreva o DDD e o número, por exemplo (11) 91234-5678.','erro'),null;
-    return {nome,senha,celular:cel,cidade:$('#lg-cidade').value.trim(),sorteio:$('#lg-sorteio').checked};
+    return {nome,senha,celular:cel,cidade:$('#lg-cidade').value.trim()};
   }
   if(!senha)return msg('#lg-msg','Digite a sua senha.','erro'),null;
   return {nome,senha,senhaOrig:$('#lg-senha').value.trim(),celular:soDig($('#lg-cel2').value)};   /* senhaOrig: só para contas da 1ª versão */
@@ -932,6 +936,13 @@ $('#ini-idioma').onclick=telaIdiomas;
 function trocaTema(){const t=document.documentElement.dataset.tema==='escuro'?'claro':'escuro';document.documentElement.dataset.tema=t;try{localStorage.setItem('nb_tema',t);}catch(e){}iconeTema();}
 function iconeTema(){const esc_=document.documentElement.dataset.tema==='escuro';document.querySelectorAll('.tema').forEach(b=>{b.textContent=esc_?'☀️':'🌙';b.setAttribute('aria-label',esc_?'Modo claro':'Modo noturno');});}
 iconeTema();
+
+/* número da versão no rodapé: SITE-PLANILHA */
+let VERSAO_PLAN=(()=>{try{return localStorage.getItem('nb_vp')||'';}catch(e){return '';}})();
+function mostraVersao(vp){if(vp){VERSAO_PLAN=vp;try{localStorage.setItem('nb_vp',vp);}catch(e){}}
+  document.querySelectorAll('.versao').forEach(e=>e.textContent=VERSAO_SITE+'-'+(VERSAO_PLAN||'0000'));}
+mostraVersao();
+if(SERVIDOR_URL)servidor({acao:'versao'}).catch(()=>{});
 
 function modal(h){$('#modal-corpo').innerHTML=h;$('#modal').classList.add('on');}
 function fechaModal(){$('#modal').classList.remove('on');}
