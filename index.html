@@ -31,7 +31,7 @@ button{touch-action:manipulation;font:inherit;cursor:pointer;border:0;border-rad
 .peq{min-height:40px;padding:8px 12px;font-size:.85rem;border-radius:12px}
 .card{background:var(--card);border:1px solid var(--linha);border-radius:22px;padding:16px;margin:12px 0;box-shadow:var(--sombra)}
 label{display:block;font-weight:800;margin:14px 0 6px}
-input[type=text],input[type=password],input[type=tel]{width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta)}
+input[type=text],input[type=password],input[type=tel],input[type=email]{width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta)}
 input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .ver-senha{display:flex;align-items:center;gap:10px;font-weight:700;margin:10px 0 4px;cursor:pointer;user-select:none}
 .ver-senha input{width:26px;height:26px;margin:0;accent-color:var(--prim-esc)}
@@ -61,6 +61,12 @@ input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .selo{font-size:.7rem;background:var(--verde2);color:var(--prim-esc);padding:2px 8px;border-radius:999px;vertical-align:middle}
 .selo.cinza{background:var(--linha);color:var(--suave)}
 .versao{text-align:center;color:var(--suave);font-size:.75rem;letter-spacing:.08em;opacity:.8;margin:18px 0 0;font-variant-numeric:tabular-nums}
+.contato summary{font-weight:900;font-size:1.1rem;cursor:pointer;list-style:none}
+.contato summary::-webkit-details-marker{display:none}
+.contato summary::after{content:' ▾';color:var(--suave)}
+.contato[open] summary::after{content:' ▴'}
+textarea{width:100%;font:inherit;font-size:1.05rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta);resize:vertical}
+textarea:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .chip{background:var(--card);border:1px solid var(--linha);border-radius:999px;min-height:42px;padding:6px 14px;font-weight:800;box-shadow:var(--sombra);white-space:nowrap}
 .chip small{color:var(--suave);font-weight:700}
 /* início */
@@ -172,6 +178,17 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
     <button class="btn" id="lg-ir">Entrar</button>
     <p class="ajuda">Anote seu nome de usuário e sua senha num papel. Você vai precisar deles para entrar de novo.</p>
   </div>
+  <details class="card contato"><summary>✉️ Contato</summary>
+    <div class="ct-corpo">
+      <p class="ajuda">Mande sua dúvida, ideia ou recado. A gente lê todas as mensagens.</p>
+      <label>Seu nome</label><input type="text" class="ct-nome" maxlength="60" autocomplete="name" placeholder="Seu nome">
+      <label>Seu e-mail</label><input type="email" class="ct-email" maxlength="80" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="exemplo@gmail.com">
+      <label>Seu telefone</label><input type="tel" class="ct-tel" inputmode="numeric" maxlength="16" autocomplete="tel" placeholder="(011)912.345.678">
+      <label>Sua mensagem</label><textarea class="ct-msg" maxlength="1500" rows="5" placeholder="Escreva aqui…"></textarea>
+      <input type="text" class="ct-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+      <div class="msg ct-aviso"></div>
+      <button class="btn ct-enviar">Enviar mensagem</button>
+    </div></details>
   <p class="centro ajuda" style="margin-bottom:2px">É de graça, bb 🚌💚</p>
   <p class="centro ajuda" style="margin-top:0">@cqcfoda</p>
   <p class="versao"></p>
@@ -220,6 +237,17 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
     <label><input type="checkbox" id="cfg-lento"> 🐢 Voz do idioma mais devagar</label>
     <p class="ajuda" id="cfg-aviso"></p>
   </div>
+  <details class="card contato"><summary>✉️ Contato</summary>
+    <div class="ct-corpo">
+      <p class="ajuda">Mande sua dúvida, ideia ou recado. A gente lê todas as mensagens.</p>
+      <label>Seu nome</label><input type="text" class="ct-nome" maxlength="60" autocomplete="name" placeholder="Seu nome">
+      <label>Seu e-mail</label><input type="email" class="ct-email" maxlength="80" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="exemplo@gmail.com">
+      <label>Seu telefone</label><input type="tel" class="ct-tel" inputmode="numeric" maxlength="16" autocomplete="tel" placeholder="(011)912.345.678">
+      <label>Sua mensagem</label><textarea class="ct-msg" maxlength="1500" rows="5" placeholder="Escreva aqui…"></textarea>
+      <input type="text" class="ct-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+      <div class="msg ct-aviso"></div>
+      <button class="btn ct-enviar">Enviar mensagem</button>
+    </div></details>
   <p class="versao"></p>
 </section>
 
@@ -243,7 +271,7 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
    Enquanto estiver vazio, as contas ficam só neste aparelho. */
 const SERVIDOR_URL='https://script.google.com/macros/s/AKfycbyPSAod5ju4b09t2Ms8v2-U8bcy5kaubTBa4dtRsM-mmaWURaINmh8GgQRulmlVfEqkXA/exec';
 /* VERSÃO DO SITE (4 números). Suba 1 a cada atualização do site. Aparece no rodapé como SITE-PLANILHA, ex.: 0004-0004 */
-const VERSAO_SITE='0006';
+const VERSAO_SITE='0007';
 
 const CURSOS={};
 /* ===== INGLÊS ===== */
@@ -969,6 +997,30 @@ mostraVersao();
 if(SERVIDOR_URL)servidor({acao:'versao'},1).catch(()=>{});   /* já "acorda" a planilha enquanto o aluno digita */
 /* funciona sem internet depois da 1ª visita (arquivo sw.js na mesma pasta do site) */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+/* ======================= CONTATO ======================= */
+function mascaraContato(inp){inp.addEventListener('input',()=>{const d=inp.value.replace(/\D/g,'').slice(0,12);let t='';
+  if(d.length)t='('+d.slice(0,3);if(d.length>=3)t+=')';if(d.length>3)t+=d.slice(3,6);if(d.length>6)t+='.'+d.slice(6,9);if(d.length>9)t+='.'+d.slice(9,12);inp.value=t;});}
+document.querySelectorAll('.contato').forEach(box=>{
+  const q=c=>box.querySelector(c),aviso=(t,tipo)=>{const e=q('.ct-aviso');e.textContent=t||'';e.className='msg ct-aviso'+(tipo?' '+tipo:'');};
+  mascaraContato(q('.ct-tel'));
+  box.addEventListener('toggle',()=>{if(box.open&&USER&&!q('.ct-nome').value)q('.ct-nome').value=USER;});
+  q('.ct-enviar').onclick=async()=>{
+    const nome=q('.ct-nome').value.trim(),email=q('.ct-email').value.trim(),tel=q('.ct-tel').value.trim(),texto=q('.ct-msg').value.trim(),dig=tel.replace(/\D/g,'');
+    if(nome.length<2)return aviso('Escreva o seu nome.','erro');
+    if(!email&&!dig)return aviso('Escreva o seu e-mail ou o seu telefone, para a gente poder responder.','erro');
+    if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return aviso('Confira o e-mail. Exemplo: maria@gmail.com','erro');
+    if(dig&&dig.length<10)return aviso('Confira o telefone, com o DDD. Exemplo: (011)912.345.678','erro');
+    if(texto.length<3)return aviso('Escreva a sua mensagem.','erro');
+    const b=q('.ct-enviar');b.disabled=true;aviso('Enviando…');
+    try{
+      const r=SERVIDOR_URL?await servidor({acao:'contato',nome:nome,email:email,telefone:tel,mensagem:texto,usuario:USER||'',hp:q('.ct-hp').value}):{ok:true};
+      if(!r||!r.ok)throw new Error((r&&r.erro)||'Não foi possível enviar.');
+      q('.ct-msg').value='';aviso('✅ Mensagem enviada! Obrigado.','ok');
+    }catch(e){aviso(e.message,'erro');}
+    finally{b.disabled=false;}
+  };
+});
 
 window.addEventListener('error',e=>{console.error(e.error||e.message);});
 window.addEventListener('unhandledrejection',e=>{console.error(e.reason);});
