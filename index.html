@@ -14,14 +14,14 @@
   --verde2:#0b3b2e;--erro:#fb7185;--erro2:#4a1020;--tinta:#e5e9f0;--suave:#9aa6b8;--linha:#2b364a;--fundo:#0d1424;--card:#151e31;--campo:#0f1729;
   --dica:#2b2412;--dica-borda:#5b4a17;--sombra:0 6px 20px rgba(0,0,0,.35);color-scheme:dark}
 *{box-sizing:border-box}
-html{font-size:18px}
+html{font-size:18px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--fundo);color:var(--tinta);font-family:"Nunito","Segoe UI Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;line-height:1.45;transition:background .25s,color .25s}
 .tela{display:none;max-width:560px;margin:0 auto;padding:14px 16px 120px;min-height:100vh}
 .tela.on{display:block;animation:entra .25s ease}
 @keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 h1{font-size:1.55rem;margin:.25em 0;letter-spacing:-.01em}
 h2{font-size:1.2rem;margin:.6em 0 .3em}
-button{font:inherit;cursor:pointer;border:0;border-radius:16px;padding:14px 18px;min-height:54px;font-weight:800;color:inherit}
+button{touch-action:manipulation;font:inherit;cursor:pointer;border:0;border-radius:16px;padding:14px 18px;min-height:54px;font-weight:800;color:inherit}
 .btn{display:block;width:100%;background:var(--prim-esc);color:#fff;box-shadow:0 4px 0 var(--prim-sombra);margin:10px 0;letter-spacing:.01em}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--prim-sombra)}
 .btn.azul{background:var(--azul);color:#fff;box-shadow:0 4px 0 var(--azul-sombra)}
@@ -49,7 +49,8 @@ input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
 .hero{text-align:center;padding:4px 0 6px}
 .onibus{display:inline-flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:30px;font-size:3.4rem;
   background:linear-gradient(145deg,#fde68a,#fbbf24);box-shadow:0 10px 24px rgba(251,191,36,.35);transform:rotate(-4deg)}
-.marca{font-size:2.3rem;font-weight:900;margin:.3em 0 .1em;background:linear-gradient(90deg,var(--prim-esc),#14b8a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.marca{font-size:2.3rem;font-weight:900;margin:.3em 0 .1em;color:var(--prim-esc)}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){.marca{background:linear-gradient(90deg,var(--prim-esc),#14b8a6);-webkit-background-clip:text;background-clip:text;color:transparent}}
 .slogan{margin:.2em 0 .6em;color:var(--suave);font-weight:600}
 .bandeiras{display:inline-block;background:var(--card);border:1px solid var(--linha);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.9rem}
 .bandeiras .breve{color:var(--suave);font-weight:600}
@@ -126,7 +127,7 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
 .cert{border:6px double #f59e0b;border-radius:20px;padding:22px;text-align:center;background:#fffdf5;color:#1e293b}
 .cert h2{font-size:1.5rem}
 .cert .nome{font-size:1.6rem;font-weight:900;color:#059669;margin:10px 0}
-.modal{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.modal{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
 .modal.on{display:flex}
 .modal .card{max-width:440px;width:100%;text-align:center}
 .cfg label{display:flex;align-items:center;gap:10px;font-weight:700;margin:10px 0}
@@ -242,7 +243,7 @@ details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:point
    Enquanto estiver vazio, as contas ficam só neste aparelho. */
 const SERVIDOR_URL='https://script.google.com/macros/s/AKfycbyPSAod5ju4b09t2Ms8v2-U8bcy5kaubTBa4dtRsM-mmaWURaINmh8GgQRulmlVfEqkXA/exec';
 /* VERSÃO DO SITE (4 números). Suba 1 a cada atualização do site. Aparece no rodapé como SITE-PLANILHA, ex.: 0004-0004 */
-const VERSAO_SITE='0005';
+const VERSAO_SITE='0006';
 
 const CURSOS={};
 /* ===== INGLÊS ===== */
@@ -528,15 +529,15 @@ const $=s=>document.querySelector(s);
 const rnd=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
-const ontem=()=>{const d=new Date(Date.now()-864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);};
+const ontem=()=>{const d=new Date(Date.now()-864e5);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);};
 const POR_NIVEL=20;
 /* curso em uso (cada idioma tem o seu) */
 let CUR=null,LICOES=[],NIVEIS=[],TOTAL=0,ITENS=[],porId={};
 function usaCurso(cod){
   CUR=CURSOS[cod]||CURSOS.en;LICOES=CUR.licoes;NIVEIS=CUR.niveis;TOTAL=LICOES.length;
   ITENS=[];LICOES.forEach((L,l)=>L.i.forEach((it,k)=>ITENS.push({id:itemId(l,k),l,en:it[0],pt:it[1],em:it[2]||L.e})));   /* en = texto no idioma estudado */
-  porId=Object.fromEntries(ITENS.map(x=>[x.id,x]));
+  porId={};ITENS.forEach(x=>{porId[x.id]=x;});
 }
 const itemId=(l,k)=>l+'.'+k;
 const nivelDe=i=>Math.min(NIVEIS.length-1,Math.floor(i/POR_NIVEL));
@@ -598,11 +599,27 @@ function abreCurso(cod){
   CONTA.idioma=CURSOS[cod]?cod:'en';usaCurso(CONTA.idioma);
   P=CONTA.cursos[CONTA.idioma]||(CONTA.cursos[CONTA.idioma]=progVazio());
 }
-async function hash(t){try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))|0;return 'x'+h;}}
-async function servidor(dados){
+async function hash(t){try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(d)].map(x=>('0'+x.toString(16)).slice(-2)).join('');}catch(e){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))|0;return 'x'+h;}}
+/* fala com a planilha: espera no máximo 12 s por tentativa e tenta de novo sozinho, sem o aluno perceber */
+function umaVez(corpo,ms){
+  return new Promise((ok,falha)=>{
+    const ctl=window.AbortController?new AbortController():null;let feito=false;
+    const t=setTimeout(()=>{if(feito)return;feito=true;if(ctl)ctl.abort();falha(new Error('lento'));},ms);
+    fetch(SERVIDOR_URL,{method:'POST',body:corpo,signal:ctl?ctl.signal:undefined,cache:'no-store'})
+      .then(r=>r.json()).then(j=>{if(!feito){feito=true;clearTimeout(t);ok(j);}})
+      .catch(e=>{if(!feito){feito=true;clearTimeout(t);falha(e);}});
+  });
+}
+async function servidor(dados,tentativas){
   if(!SERVIDOR_URL)return servidorLocal(dados);
-  const r=await fetch(SERVIDOR_URL,{method:'POST',body:JSON.stringify(Object.assign({vs:VERSAO_SITE},dados))});
-  const j=await r.json();if(j&&j.planilha)mostraVersao(j.planilha);return j;
+  const corpo=JSON.stringify(Object.assign({vs:VERSAO_SITE},dados));let erro=null;
+  for(let i=0;i<(tentativas||3);i++){
+    if(i)await new Promise(r=>setTimeout(r,800*i));
+    try{const j=await umaVez(corpo,12000);if(j&&j.planilha)mostraVersao(j.planilha);
+      if(j&&j.ocupado){erro=new Error(j.erro);continue;}   /* planilha ocupada: tenta de novo */
+      return j;}catch(e){erro=e;}
+  }
+  throw new Error(navigator.onLine===false?'Sem internet. Verifique a conexão e tente de novo.':'A conexão está lenta. Toque de novo em um instante.');
 }
 /* sem servidor: as contas ficam guardadas só neste aparelho */
 async function servidorLocal(d){
@@ -615,13 +632,18 @@ async function servidorLocal(d){
   if(d.acao==='entrar')return{ok:true,nome:contas[k].nome,progresso:null};
   return{ok:true};
 }
+/* o progresso é guardado primeiro no aparelho (na hora) e depois enviado à planilha em segundo plano.
+   Sem internet, fica marcado como pendente e é enviado sozinho quando a conexão voltar. */
 let salvando=0,salvarDeNovo=false;
 function salvar(){
   salvaLocal();if(!SERVIDOR_URL||!USER)return;
+  try{localStorage.setItem('nb_pendente','1');}catch(e){}
   if(salvando){salvarDeNovo=true;return;}
   salvando=1;
-  servidor({acao:'salvar',nome:USER,senha:SENHA,celular:CEL,progresso:CONTA}).catch(()=>{}).finally(()=>{salvando=0;if(salvarDeNovo){salvarDeNovo=false;salvar();}});
+  const fim=ok=>{salvando=0;if(ok&&!salvarDeNovo)try{localStorage.removeItem('nb_pendente');}catch(e){}if(salvarDeNovo){salvarDeNovo=false;salvar();}};
+  servidor({acao:'salvar',nome:USER,senha:SENHA,celular:CEL,progresso:CONTA},4).then(r=>fim(!!(r&&r.ok)),()=>fim(false));
 }
+addEventListener('online',()=>{try{if(localStorage.getItem('nb_pendente')&&USER&&CONTA)salvar();}catch(e){}});
 let MODO='entrar',CEL='';
 function setModo(m){MODO=m;document.querySelectorAll('.abas button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   $('#tela-login .card').classList.toggle('modo-criar',m==='criar');$('#lg-ir').textContent=m==='criar'?'Criar minha conta':'Entrar';
@@ -635,7 +657,7 @@ function validaCampos(){
   const nome=$('#lg-nome').value.trim(),senha=$('#lg-senha').value.trim().toLowerCase();
   if(nome.length<2)return msg('#lg-msg','Escreva um nome de usuário com pelo menos 2 letras.','erro'),null;
   if(MODO==='criar'){
-    if(!/^[\p{L}\p{N} ._-]+$/u.test(nome))return msg('#lg-msg','Use só letras, números, espaço, ponto ou traço no nome de usuário.','erro'),null;
+    if(!/^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ._-]+$/.test(nome))return msg('#lg-msg','Use só letras, números, espaço, ponto ou traço no nome de usuário.','erro'),null;
     if(senha.length<8)return msg('#lg-msg','A senha precisa ter pelo menos 8 letras ou números.','erro'),null;
     if(!/^[a-z0-9]+$/.test(senha))return msg('#lg-msg','Use só letras e números na senha, sem espaço, acento ou símbolo.','erro'),null;
     const cel=soDig($('#lg-cel').value);
@@ -652,6 +674,7 @@ async function entrar(){
   const acao=MODO;
   msg('#lg-msg',acao==='criar'?'Criando sua conta…':'Entrando…');
   $('#lg-ir').disabled=true;
+  const aviso=setTimeout(()=>msg('#lg-msg','Só mais um instante… ⏳'),4000);
   try{
     const r=await servidor(Object.assign({acao},c));
     if(r&&r.precisaCelular){$('#lg-confirma').style.display='';msg('#lg-msg',r.erro,'erro');$('#lg-cel2').focus();return;}
@@ -664,7 +687,7 @@ async function entrar(){
     inicio();
     if(acao==='criar')modal(`<div style="font-size:3rem">🎉</div><h2>Conta criada!</h2><p>Bem-vindo(a), <b>${esc(USER)}</b>!</p><p>Você começa pelo <b>${CUR.bandeira} ${CUR.nome}</b>. Faça <b>uma lição por dia</b>: em poucos meses você vai entender e falar o básico.</p>${CEL?'':'<p class="ajuda">Você não cadastrou celular. Sem ele, qualquer pessoa que souber sua senha consegue entrar.</p>'}<p class="ajuda">Toque no 🔊 para ouvir as palavras quantas vezes quiser.</p><button class="btn" onclick="fechaModal()">Vamos começar!</button>`);
   }catch(e){msg('#lg-msg',e.message==='Failed to fetch'?'Sem internet. Verifique a conexão e tente de novo.':e.message,'erro');}
-  finally{$('#lg-ir').disabled=false;}
+  finally{clearTimeout(aviso);$('#lg-ir').disabled=false;}
 }
 $('#lg-ir').onclick=entrar;
 ['#lg-senha','#lg-cel2'].forEach(k=>$(k).onkeydown=e=>{if(e.key==='Enter')entrar();});
@@ -776,7 +799,8 @@ function rodape(fb,fb2,txt,acao,estado,desab){
 }
 function liberaVerificar(on){$('#rd-btn').disabled=!on;}
 function instrHtml(t){return `<div class="instr"><span>${esc(t)}</span><button onclick="fala('${t.replace(/'/g,"\\'")}','pt-BR')" aria-label="Ouvir instrução">🔊</button></div>`;}
-function proximo(){
+function proximo(){try{proximo_();}catch(e){console.error(e);if(LC){LC.pos++;if(LC.pos<LC.fila.length)setTimeout(proximo,0);else terminar();}}}
+function proximo_(){
   if(LC.pos>=LC.fila.length)return terminar();
   EX=LC.fila[LC.pos];resposta=null;
   $('#lc-prog').style.width=Math.round(LC.pos/LC.fila.length*100)+'%';
@@ -942,7 +966,12 @@ let VERSAO_PLAN=(()=>{try{return localStorage.getItem('nb_vp')||'';}catch(e){ret
 function mostraVersao(vp){if(vp){VERSAO_PLAN=vp;try{localStorage.setItem('nb_vp',vp);}catch(e){}}
   document.querySelectorAll('.versao').forEach(e=>e.textContent=VERSAO_SITE+'-'+(VERSAO_PLAN||'0000'));}
 mostraVersao();
-if(SERVIDOR_URL)servidor({acao:'versao'}).catch(()=>{});
+if(SERVIDOR_URL)servidor({acao:'versao'},1).catch(()=>{});   /* já "acorda" a planilha enquanto o aluno digita */
+/* funciona sem internet depois da 1ª visita (arquivo sw.js na mesma pasta do site) */
+if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+window.addEventListener('error',e=>{console.error(e.error||e.message);});
+window.addEventListener('unhandledrejection',e=>{console.error(e.reason);});
 
 function modal(h){$('#modal-corpo').innerHTML=h;$('#modal').classList.add('on');}
 function fechaModal(){$('#modal').classList.remove('on');}
@@ -955,7 +984,8 @@ function fechaModal(){$('#modal').classList.remove('on');}
     CONTA=normalizaConta(local);abreCurso(CONTA.idioma);inicio();
     if(SERVIDOR_URL)servidor({acao:'entrar',nome:USER,senha:SENHA,celular:CEL}).then(r=>{
       if(r&&r.ok&&r.progresso){CONTA=normalizaConta(melhorConta(r.progresso,CONTA));abreCurso(CONTA.idioma);salvaLocal();if($('#tela-inicio').classList.contains('on'))inicio();}
-      else if(r&&(r.sair||r.precisaCelular)){localStorage.removeItem('nb_sessao');sessionStorage.removeItem('nb_sessao');USER='';P=null;CONTA=null;tela('tela-login');msg('#lg-msg',r.erro||'Entre de novo.','erro');}
+      else if(r&&r.ok)try{if(localStorage.getItem('nb_pendente'))salvar();}catch(e){}
+      if(r&&(r.sair||r.precisaCelular)){localStorage.removeItem('nb_sessao');sessionStorage.removeItem('nb_sessao');USER='';P=null;CONTA=null;tela('tela-login');msg('#lg-msg',r.erro||'Entre de novo.','erro');}
     }).catch(()=>{});
   }})();
 </script>
