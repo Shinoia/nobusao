@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10b981">
+<script>try{const t=localStorage.getItem("nb_tema")||(matchMedia("(prefers-color-scheme: dark)").matches?"escuro":"claro");document.documentElement.dataset.tema=t;}catch(e){}</script>
+<title>Nobusão — aprenda idiomas no caminho</title>
+<style>
+:root{--prim:#10b981;--prim-esc:#059669;--prim-sombra:#047857;--sol:#fbbf24;--azul:#2563eb;--azul2:#e0ecff;--azul-sombra:#1d4ed8;
+  --verde2:#d1fae5;--erro:#e11d48;--erro2:#ffe4e6;--tinta:#1e293b;--suave:#64748b;--linha:#e2e8f0;--fundo:#f4f7fb;--card:#ffffff;--campo:#ffffff;
+  --dica:#fffbeb;--dica-borda:#fde68a;--sombra:0 6px 20px rgba(15,23,42,.06);color-scheme:light}
+[data-tema=escuro]{--prim:#34d399;--prim-esc:#10b981;--prim-sombra:#047857;--azul:#7aa7ff;--azul2:#1e2f52;--azul-sombra:#0f1d3a;
+  --verde2:#0b3b2e;--erro:#fb7185;--erro2:#4a1020;--tinta:#e5e9f0;--suave:#9aa6b8;--linha:#2b364a;--fundo:#0d1424;--card:#151e31;--campo:#0f1729;
+  --dica:#2b2412;--dica-borda:#5b4a17;--sombra:0 6px 20px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;background:var(--fundo);color:var(--tinta);font-family:"Nunito","Segoe UI Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;line-height:1.45;transition:background .25s,color .25s}
+.tela{display:none;max-width:560px;margin:0 auto;padding:14px 16px 120px;min-height:100vh}
+.tela.on{display:block;animation:entra .25s ease}
+@keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:1.55rem;margin:.25em 0;letter-spacing:-.01em}
+h2{font-size:1.2rem;margin:.6em 0 .3em}
+button{font:inherit;cursor:pointer;border:0;border-radius:16px;padding:14px 18px;min-height:54px;font-weight:800;color:inherit}
+.btn{display:block;width:100%;background:var(--prim-esc);color:#fff;box-shadow:0 4px 0 var(--prim-sombra);margin:10px 0;letter-spacing:.01em}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--prim-sombra)}
+.btn.azul{background:var(--azul);color:#fff;box-shadow:0 4px 0 var(--azul-sombra)}
+[data-tema=escuro] .btn.azul{background:#3b6fe0}
+.btn.claro{background:var(--card);color:var(--tinta);border:2px solid var(--linha);box-shadow:0 4px 0 var(--linha)}
+.btn:disabled{background:var(--linha);box-shadow:0 4px 0 var(--linha);color:var(--suave)}
+.peq{min-height:40px;padding:8px 12px;font-size:.85rem;border-radius:12px}
+.card{background:var(--card);border:1px solid var(--linha);border-radius:22px;padding:16px;margin:12px 0;box-shadow:var(--sombra)}
+label{display:block;font-weight:800;margin:14px 0 6px}
+input[type=text],input[type=password]{width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--linha);border-radius:14px;background:var(--campo);color:var(--tinta)}
+input:focus{outline:3px solid var(--azul2);border-color:var(--azul)}
+.ver-senha{display:flex;align-items:center;gap:10px;font-weight:700;margin:10px 0 4px;cursor:pointer;user-select:none}
+.ver-senha input{width:26px;height:26px;margin:0;accent-color:var(--prim-esc)}
+.msg{min-height:1.4em;margin:8px 0;font-weight:700}
+.msg.erro{color:var(--erro)}.msg.ok{color:var(--prim-esc)}
+.ajuda{color:var(--suave);font-size:.85rem}
+.centro{text-align:center}
+.falar{background:var(--azul2);color:var(--azul);border-radius:50%;width:54px;height:54px;padding:0;font-size:1.5rem;flex:none}
+.topo{display:flex;justify-content:space-between;align-items:center;gap:8px}
+/* marca */
+.marca-topo{display:flex;justify-content:space-between;align-items:center;min-height:48px}
+.marca-peq{font-weight:900;font-size:1.05rem;color:var(--prim-esc)}
+.tema{background:var(--card);border:1px solid var(--linha);border-radius:50%;width:44px;height:44px;min-height:44px;padding:0;font-size:1.2rem;box-shadow:var(--sombra)}
+.voltar{background:none;min-height:44px;padding:4px 0;color:var(--azul)}
+.hero{text-align:center;padding:4px 0 6px}
+.onibus{display:inline-flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:30px;font-size:3.4rem;
+  background:linear-gradient(145deg,#fde68a,#fbbf24);box-shadow:0 10px 24px rgba(251,191,36,.35);transform:rotate(-4deg)}
+.marca{font-size:2.3rem;font-weight:900;margin:.3em 0 .1em;background:linear-gradient(90deg,var(--prim-esc),#14b8a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.slogan{margin:.2em 0 .6em;color:var(--suave);font-weight:600}
+.bandeiras{display:inline-block;background:var(--card);border:1px solid var(--linha);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.9rem}
+.bandeiras .breve{color:var(--suave);font-weight:600}
+.chip{background:var(--card);border:1px solid var(--linha);border-radius:999px;min-height:42px;padding:6px 14px;font-weight:800;box-shadow:var(--sombra);white-space:nowrap}
+.chip small{color:var(--suave);font-weight:700}
+/* início */
+.nivel{background:linear-gradient(135deg,#059669,#14b8a6 60%,#22d3ee);color:#fff;border:0}
+.nivel .grande{font-size:2.8rem;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.15))}
+.barra{height:14px;background:rgba(255,255,255,.3);border-radius:9px;overflow:hidden;margin:10px 0 4px}
+.barra i{display:block;height:100%;background:#fff;border-radius:9px;transition:width .4s}
+.stats{display:flex;gap:10px}
+.stats div{flex:1;background:var(--card);border:1px solid var(--linha);border-radius:18px;padding:10px 6px;text-align:center;font-weight:700;font-size:.85rem;box-shadow:var(--sombra)}
+.stats b{display:block;font-size:1.4rem}
+.tarefa{display:flex;align-items:center;gap:10px;padding:8px 0;font-weight:700}
+.tarefa .ck{width:30px;height:30px;border-radius:50%;border:3px solid var(--linha);display:flex;align-items:center;justify-content:center;flex:none;color:transparent}
+.tarefa.ok .ck{background:var(--prim-esc);border-color:var(--prim-esc);color:#fff}
+.lista-lic{list-style:none;padding:0;margin:0}
+.lista-lic li{display:flex;align-items:center;gap:12px;padding:10px;border-radius:16px;border:1px solid var(--linha);margin:8px 0;background:var(--card);cursor:pointer}
+.lista-lic li.bloq{opacity:.5;cursor:default}
+.lista-lic li.atual{border:2px solid var(--prim-esc);background:var(--verde2)}
+.lista-lic .em{font-size:1.6rem;width:36px;text-align:center}
+.lista-lic .tx{flex:1}
+.lista-lic small{color:var(--suave)}
+details.nv{margin:8px 0}
+details.nv summary{font-weight:900;font-size:1.05rem;padding:10px 0;cursor:pointer}
+.idioma{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--linha);border-radius:20px;padding:14px;margin:10px 0;box-shadow:var(--sombra);font-weight:700}
+.idioma.atual{border:2px solid var(--prim-esc);background:var(--verde2)}
+.idioma.breve{opacity:.55}
+.idioma .bd{font-size:2.2rem}
+.idioma .tx{flex:1}
+.idioma small{display:block;color:var(--suave);font-weight:600}
+/* lição */
+.licao-topo{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--fundo);padding:8px 0;z-index:2}
+.licao-topo .fechar{background:none;min-height:44px;padding:4px 10px;font-size:1.4rem;color:var(--suave)}
+.prog{flex:1;height:16px;background:var(--linha);border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--prim-esc),#14b8a6);transition:width .3s}
+.instr{display:flex;align-items:center;gap:10px;font-size:1.15rem;font-weight:900;margin:14px 0}
+.instr button{background:none;min-height:40px;padding:4px 8px;font-size:1.2rem}
+.palavra{text-align:center;padding:10px 0}
+.palavra .em{font-size:4.2rem;line-height:1.1}
+.palavra .en{font-size:1.9rem;font-weight:900;color:var(--azul);margin:8px 0 2px;word-break:break-word}
+.palavra .pt{font-size:1.2rem;color:var(--suave)}
+.sons{display:flex;justify-content:center;gap:14px;margin:14px 0}
+.sons button{background:var(--azul2);color:var(--azul);min-width:120px}
+.opcoes button{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--linha);box-shadow:0 3px 0 var(--linha);margin:10px 0;font-weight:700;font-size:1.05rem}
+.opcoes button.sel{border-color:var(--azul);background:var(--azul2)}
+.opcoes button.certo{border-color:var(--prim-esc);background:var(--verde2)}
+.opcoes button.errado{border-color:var(--erro);background:var(--erro2)}
+.frase-pt{font-size:1.3rem;font-weight:800;background:var(--card);border:1px solid var(--linha);border-radius:18px;padding:14px;margin:8px 0;box-shadow:var(--sombra)}
+.montagem{min-height:64px;border-bottom:3px dashed var(--linha);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;margin-bottom:14px}
+.blocos{display:flex;flex-wrap:wrap;gap:8px}
+.bloco{background:var(--card);border:2px solid var(--linha);box-shadow:0 3px 0 var(--linha);min-height:48px;padding:8px 14px;font-weight:800;border-radius:14px}
+.bloco.usado{visibility:hidden}
+.grande-input{font-size:1.3rem!important;padding:16px!important}
+.mic{display:block;margin:20px auto;width:110px;height:110px;border-radius:50%;font-size:3rem;background:var(--azul);color:#fff;box-shadow:0 5px 0 var(--azul-sombra)}
+.mic.ouvindo{background:var(--erro);box-shadow:0 5px 0 #7f1d1d;animation:pulsa 1s infinite}
+@keyframes pulsa{50%{transform:scale(1.06)}}
+.rodape{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--linha);padding:12px 16px calc(12px + env(safe-area-inset-bottom));z-index:5}
+.rodape .in{max-width:560px;margin:0 auto}
+.rodape.certo{background:var(--verde2);border-color:var(--prim)}
+.rodape.errado{background:var(--erro2);border-color:var(--erro)}
+.rodape .fb{font-weight:900;font-size:1.1rem;margin-bottom:2px}
+.rodape .fb2{margin-bottom:6px}
+.rodape .btn{margin:6px 0 0}
+.dica{background:var(--dica);border:1px solid var(--dica-borda);border-radius:18px;padding:12px;margin:10px 0}
+.estrelas{font-size:3rem;letter-spacing:6px}
+.cert{border:6px double #f59e0b;border-radius:20px;padding:22px;text-align:center;background:#fffdf5;color:#1e293b}
+.cert h2{font-size:1.5rem}
+.cert .nome{font-size:1.6rem;font-weight:900;color:#059669;margin:10px 0}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.modal.on{display:flex}
+.modal .card{max-width:440px;width:100%;text-align:center}
+.cfg label{display:flex;align-items:center;gap:10px;font-weight:700;margin:10px 0}
+.cfg input{width:24px;height:24px;accent-color:var(--prim-esc)}
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;left:0;top:0;width:100%}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="tela on" id="tela-login">
+  <div class="marca-topo"><span></span><button class="tema" onclick="trocaTema()" aria-label="Modo noturno">🌙</button></div>
+  <div class="hero">
+    <div class="onibus">🚌</div>
+    <h1 class="marca">Nobusão</h1>
+    <p class="slogan">Aprenda idiomas no caminho.<br>Um pouco por dia: no ônibus, em casa ou no intervalo.</p>
+    <div class="bandeiras">🇺🇸 Inglês <span class="breve">· 🇪🇸 🇫🇷 🇮🇹 em breve</span></div>
+  </div>
+  <div class="card">
+    <div class="topo"><h2 style="margin:0">Entrar</h2><button class="falar" id="lg-ouvir" title="Ouvir as instruções" aria-label="Ouvir as instruções">🔊</button></div>
+    <label for="lg-nome">Seu nome de usuário</label>
+    <input type="text" id="lg-nome" maxlength="20" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="Exemplo: maria123">
+    <label for="lg-senha">Sua senha</label>
+    <input type="password" id="lg-senha" maxlength="30" autocomplete="current-password" placeholder="Pelo menos 4 letras ou números">
+    <label class="ver-senha"><input type="checkbox" id="lg-ver"> 👁️ Mostrar a senha</label>
+    <div class="msg" id="lg-msg"></div>
+    <button class="btn" id="lg-entrar">Entrar</button>
+    <button class="btn claro" id="lg-criar">Primeira vez? Criar minha conta</button>
+    <p class="ajuda">Anote seu nome de usuário e sua senha num papel. Você vai precisar deles para entrar de novo.</p>
+  </div>
+  <p class="centro ajuda">É de graça. 🚌💚</p>
+</section>
+
+<!-- ============ IDIOMAS ============ -->
+<section class="tela" id="tela-idiomas">
+  <div class="marca-topo"><button class="voltar" id="id-voltar">← Voltar</button><button class="tema" onclick="trocaTema()" aria-label="Modo noturno">🌙</button></div>
+  <h1>Qual idioma você quer aprender?</h1>
+  <p class="ajuda">Cada idioma guarda o seu próprio progresso.</p>
+  <div id="id-lista"></div>
+</section>
+
+<!-- ============ INÍCIO ============ -->
+<section class="tela" id="tela-inicio">
+  <div class="marca-topo"><span class="marca-peq">🚌 Nobusão</span><span><button class="tema" onclick="trocaTema()" aria-label="Modo noturno">🌙</button> <button class="btn claro peq" id="ini-sair" style="width:auto;margin:0;display:inline-block">Sair</button></span></div>
+  <div class="topo"><h1 id="ini-ola">Olá!</h1><button class="chip" id="ini-idioma"></button></div>
+  <div class="card nivel" id="ini-nivel"></div>
+  <div class="stats">
+    <div>🔥<b id="ini-seq">0</b>dias seguidos</div>
+    <div>⭐<b id="ini-xp">0</b>pontos</div>
+    <div>📚<b id="ini-feitas">0</b>lições</div>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0">📋 Tarefa de hoje</h2>
+    <div class="tarefa" id="tf-lic"><span class="ck">✓</span><span>Fazer a lição do dia</span></div>
+    <div class="tarefa" id="tf-rev"><span class="ck">✓</span><span>Fazer a revisão</span></div>
+    <button class="btn" id="ini-licao">▶ Começar a lição</button>
+    <button class="btn azul" id="ini-rev">🔁 Revisão</button>
+  </div>
+  <h2>📖 Todas as lições</h2>
+  <div id="ini-lista"></div>
+  <details class="card"><summary style="font-weight:800;cursor:pointer">❓ Como funciona o curso</summary>
+    <ul style="padding-left:20px;margin-bottom:0">
+      <li><b>Um pouco todo dia.</b> 10 minutos por dia ensinam mais do que horas num dia só.</li>
+      <li><b>Revisão na hora certa.</b> O curso guarda o que você erra e mostra de novo depois de 1, 2, 4, 7, 15 e 30 dias, antes de você esquecer.</li>
+      <li><b>Lembrar sem olhar.</b> Escrever e escolher a resposta faz o cérebro guardar melhor do que só ler.</li>
+      <li><b>Ouvir e repetir junto.</b> Repetir em voz alta o que ouviu melhora a pronúncia.</li>
+      <li><b>Frases prontas do dia a dia.</b> Mercado, loja, shopping, trabalho e notícias: coisas que você vai usar de verdade.</li>
+      <li><b>Errar faz parte.</b> Quando você erra, a pergunta volta no fim da lição.</li>
+    </ul></details>
+  <div class="card cfg">
+    <h2 style="margin-top:0">⚙️ Ajustes</h2>
+    <label><input type="checkbox" id="cfg-voz"> 🔊 Ler as instruções em voz alta (em português)</label>
+    <label><input type="checkbox" id="cfg-fala"> 🎤 Fazer exercícios de falar no microfone</label>
+    <label><input type="checkbox" id="cfg-lento"> 🐢 Voz do idioma mais devagar</label>
+    <p class="ajuda" id="cfg-aviso"></p>
+  </div>
+</section>
+
+<!-- ============ LIÇÃO ============ -->
+<section class="tela" id="tela-licao">
+  <div class="licao-topo"><button class="fechar" id="lc-fechar" aria-label="Sair da lição">✖</button><div class="prog"><i id="lc-prog"></i></div></div>
+  <div id="lc-corpo"></div>
+</section>
+<div class="rodape" id="rodape" style="display:none"><div class="in"><div class="fb" id="rd-fb"></div><div class="fb2" id="rd-fb2"></div><button class="btn" id="rd-btn">Verificar</button></div></div>
+
+<!-- ============ RESULTADO ============ -->
+<section class="tela" id="tela-fim">
+  <div class="centro" id="fim-corpo"></div>
+</section>
+
+<div class="modal" id="modal"><div class="card" id="modal-corpo"></div></div>
+
+<script>
+/* ======================= CONFIGURAÇÃO =======================
+   Cole aqui o endereço do Apps Script (termina em /exec).
+   Enquanto estiver vazio, as contas ficam só neste aparelho. */
+const SERVIDOR_URL='https://script.google.com/macros/s/AKfycbyPSAod5ju4b09t2Ms8v2-U8bcy5kaubTBa4dtRsM-mmaWURaINmh8GgQRulmlVfEqkXA/exec';
+
+const CURSOS={};
+/* ===== INGLÊS ===== */
+CURSOS.en=(()=>{
+const NIVEIS=[
+ {n:'Primeiros passos',e:'🌱'},
+ {n:'Dia a dia',e:'🏠'},
+ {n:'Trabalho e cidade',e:'🏙️'},
+ {n:'Conversas',e:'💬'},
+ {n:'Vendas e compras',e:'🛍️'},
+ {n:'Notícias fáceis',e:'📰'}
+];
+/* cada lição: t = título, e = emoji, d = dica curta, i = itens [inglês, português, emoji]; prova:1 = revisão do nível;
+   txt = notícia de treino {en, pt, q (pergunta), ok (resposta certa), w (respostas erradas)} */
+const LICOES=[
+/* ===== NÍVEL 1 ===== */
+{t:'Cumprimentos',e:'👋',d:'Hello e Hi querem dizer "olá". Hi é mais informal, entre amigos.',i:[
+ ['Hello','Olá','👋'],['Hi','Oi','🙋'],['Good morning','Bom dia','🌅'],['Good afternoon','Boa tarde','☀️'],['Good night','Boa noite','🌙'],['Goodbye','Tchau','👋']]},
+{t:'Educação',e:'🙏',d:'Thank you serve para homem e mulher: obrigado e obrigada.',i:[
+ ['Please','Por favor','🙏'],['Thank you','Obrigado','😊'],["You're welcome",'De nada','🤗'],['Sorry','Desculpa','😔'],['Excuse me','Com licença','🙋'],['Yes','Sim','👍'],['No','Não','👎']]},
+{t:'Me apresentar',e:'🤝',d:'Em inglês, a pergunta começa com a palavra de pergunta: What = o que, qual.',i:[
+ ['My name is Ana.','Meu nome é Ana.','📛'],['What is your name?','Qual é o seu nome?','❓'],['Nice to meet you.','Prazer em conhecer você.','🤝'],['I am from Brazil.','Eu sou do Brasil.','🇧🇷'],['Where are you from?','De onde você é?','🌎']]},
+{t:'Como você está?',e:'😀',d:'"I am" quer dizer "eu sou" e também "eu estou".',i:[
+ ['How are you?','Como você está?','❓'],['I am fine.','Eu estou bem.','👍'],['I am tired.','Eu estou cansado.','😴'],['I am happy.','Eu estou feliz.','😀'],['And you?','E você?','👉']]},
+{t:'Números de 0 a 5',e:'🔢',d:'Ouça bem: "three" (três) e "tree" (árvore) são diferentes.',i:[
+ ['zero','zero','0️⃣'],['one','um','1️⃣'],['two','dois','2️⃣'],['three','três','3️⃣'],['four','quatro','4️⃣'],['five','cinco','5️⃣']]},
+{t:'Números de 6 a 10',e:'🔟',d:'Para dizer a idade, em inglês se usa "I am": I am ten = eu tenho dez anos.',i:[
+ ['six','seis','6️⃣'],['seven','sete','7️⃣'],['eight','oito','8️⃣'],['nine','nove','9️⃣'],['ten','dez','🔟'],['How old are you?','Quantos anos você tem?','🎂']]},
+{t:'Família',e:'👪',d:'Brother é irmão e sister é irmã.',i:[
+ ['mother','mãe','👩'],['father','pai','👨'],['son','filho','👦'],['daughter','filha','👧'],['brother','irmão','🧑'],['sister','irmã','👩‍🦱']]},
+{t:'Cores',e:'🎨',d:'Em inglês a cor vem antes da coisa: blue car = carro azul.',i:[
+ ['red','vermelho','🔴'],['blue','azul','🔵'],['green','verde','🟢'],['yellow','amarelo','🟡'],['black','preto','⚫'],['white','branco','⚪']]},
+{t:'A casa',e:'🏠',d:'House é a construção; home é o lar, o lugar onde você mora.',i:[
+ ['house','casa','🏠'],['door','porta','🚪'],['bed','cama','🛏️'],['table','mesa','🪑'],['chair','cadeira','💺'],['kitchen','cozinha','🍳']]},
+{t:'Comida',e:'🍚',d:'Para pedir, é só dizer a comida + please: Water, please.',i:[
+ ['water','água','💧'],['coffee','café','☕'],['bread','pão','🍞'],['rice','arroz','🍚'],['beans','feijão','🫘'],['milk','leite','🥛']]},
+{t:'Frutas',e:'🍎',d:'Banana se escreve igual, mas a pronúncia muda. Ouça!',i:[
+ ['apple','maçã','🍎'],['banana','banana','🍌'],['orange','laranja','🍊'],['grape','uva','🍇'],['lemon','limão','🍋'],['watermelon','melancia','🍉']]},
+{t:'Eu quero, eu gosto',e:'😋',d:'Para dizer "não", coloque don\'t antes do verbo: I don\'t like.',i:[
+ ['I want water.','Eu quero água.','💧'],['I like coffee.','Eu gosto de café.','☕'],["I don't like milk.",'Eu não gosto de leite.','🥛'],['Do you want bread?','Você quer pão?','🍞'],['I am hungry.','Eu estou com fome.','🍽️'],['I am thirsty.','Eu estou com sede.','🥤']]},
+{t:'Dias da semana',e:'📅',d:'Em inglês, os dias da semana começam com letra maiúscula.',i:[
+ ['Monday','segunda-feira','📅'],['Tuesday','terça-feira','📅'],['Wednesday','quarta-feira','📅'],['Thursday','quinta-feira','📅'],['Friday','sexta-feira','🎉'],['Saturday','sábado','🛋️'],['Sunday','domingo','☀️']]},
+{t:'Quando?',e:'⏰',d:'Every day (todo dia) é separado; everyday junto quer dizer "comum".',i:[
+ ['today','hoje','📍'],['tomorrow','amanhã','➡️'],['yesterday','ontem','⬅️'],['now','agora','⏱️'],['later','mais tarde','⏳'],['every day','todo dia','🔁']]},
+{t:'Não entendi',e:'🤔',d:'Estas frases salvam qualquer conversa. Decore bem!',i:[
+ ["I don't understand.",'Eu não entendo.','🤔'],['Can you repeat, please?','Você pode repetir, por favor?','🔁'],['Speak slowly, please.','Fale devagar, por favor.','🐢'],['I speak a little English.','Eu falo um pouco de inglês.','🗣️'],['What does this mean?','O que isso significa?','❓']]},
+{t:'O corpo',e:'🖐️',d:'No plural, muitas palavras ganham "s": hand, hands.',i:[
+ ['head','cabeça','🙂'],['hand','mão','✋'],['foot','pé','🦶'],['eye','olho','👁️'],['mouth','boca','👄'],['arm','braço','💪']]},
+{t:'Roupas',e:'👕',d:'Pants (calça) e shoes (sapatos) quase sempre aparecem no plural.',i:[
+ ['shirt','camisa','👕'],['pants','calça','👖'],['shoes','sapatos','👞'],['dress','vestido','👗'],['jacket','jaqueta','🧥'],['hat','chapéu','👒']]},
+{t:'Animais',e:'🐶',d:'Fish é peixe, e o plural também é fish.',i:[
+ ['dog','cachorro','🐶'],['cat','gato','🐱'],['bird','pássaro','🐦'],['fish','peixe','🐟'],['horse','cavalo','🐴'],['cow','vaca','🐄']]},
+{t:'Lugares',e:'📍',d:'Bus stop = ponto de ônibus. Stop quer dizer "parada".',i:[
+ ['school','escola','🏫'],['hospital','hospital','🏥'],['market','mercado','🛒'],['bank','banco','🏦'],['church','igreja','⛪'],['bus stop','ponto de ônibus','🚏']]},
+{t:'Revisão do nível 1',e:'🏅',prova:1,d:'Revise tudo o que aprendeu no nível 1. Acertando, você passa para o nível 2!',i:[]},
+/* ===== NÍVEL 2 ===== */
+{t:'Números de 11 a 20',e:'🔢',d:'De 13 a 19, os números terminam em "teen".',i:[
+ ['eleven','onze','1️⃣'],['twelve','doze','🕛'],['thirteen','treze','🔢'],['fourteen','catorze','🔢'],['fifteen','quinze','🔢'],['twenty','vinte','🔢']]},
+{t:'Preços',e:'💲',d:'Para perguntar o preço: How much? = Quanto?',i:[
+ ['thirty','trinta','🔢'],['forty','quarenta','🔢'],['fifty','cinquenta','🔢'],['one hundred','cem','💯'],['How much is it?','Quanto custa?','💲'],['It is ten dollars.','Custa dez dólares.','💵']]},
+{t:'As horas',e:'🕒',d:"O'clock é usado só para hora cheia: one o'clock = uma hora.",i:[
+ ['What time is it?','Que horas são?','⌚'],["It is one o'clock.",'É uma hora.','🕐'],['It is three thirty.','São três e meia.','🕞'],['in the morning','de manhã','🌅'],['at night','à noite','🌙']]},
+{t:'Minha rotina',e:'🛁',d:'Em português falamos "tomar banho"; em inglês, "take a shower".',i:[
+ ['I wake up.','Eu acordo.','⏰'],['I take a shower.','Eu tomo banho.','🚿'],['I eat breakfast.','Eu tomo café da manhã.','🍳'],['I go to work.','Eu vou para o trabalho.','🚌'],['I go to sleep.','Eu vou dormir.','😴']]},
+{t:'Ações do dia',e:'🏃',d:'Estas palavras são verbos: indicam ação.',i:[
+ ['eat','comer','🍽️'],['drink','beber','🥤'],['sleep','dormir','😴'],['work','trabalhar','🛠️'],['study','estudar','📚'],['walk','andar','🚶']]},
+{t:'Eu, você, ele, ela',e:'👥',d:'Com he (ele) e she (ela), o verbo ganha "s": he works.',i:[
+ ['I work.','Eu trabalho.','🙋'],['You work.','Você trabalha.','👉'],['He works.','Ele trabalha.','👨'],['She works.','Ela trabalha.','👩'],['We work.','Nós trabalhamos.','👫'],['They work.','Eles trabalham.','👥']]},
+{t:'Palavras de pergunta',e:'❓',d:'Quase todas começam com "wh".',i:[
+ ['Where?','Onde?','📍'],['What?','O quê?','❓'],['When?','Quando?','📅'],['Who?','Quem?','🧑'],['Why?','Por quê?','🤷'],['How?','Como?','🔧']]},
+{t:'No mercado',e:'🛒',d:'This = isto, isso (coisa perto de você).',i:[
+ ['How much is this?','Quanto custa isto?','🏷️'],['It is cheap.','É barato.','👍'],['It is expensive.','É caro.','💸'],['I want to buy this.','Eu quero comprar isto.','🛍️'],['Do you have a bag?','Você tem uma sacola?','🛍️']]},
+{t:'Pagando',e:'💳',d:'Cash é dinheiro em espécie, em notas e moedas.',i:[
+ ['cash','dinheiro (em espécie)','💵'],['card','cartão','💳'],['change','troco','🪙'],['Can I pay with card?','Posso pagar com cartão?','💳'],['Here is your change.','Aqui está o seu troco.','🪙']]},
+{t:'O tempo lá fora',e:'🌦️',d:'Para falar do tempo, começamos com "It is": It is hot.',i:[
+ ['It is hot.','Está quente.','🥵'],['It is cold.','Está frio.','🥶'],['It is raining.','Está chovendo.','🌧️'],['sun','sol','☀️'],['rain','chuva','🌧️']]},
+{t:'Sentimentos',e:'😢',d:'Use "I am" + sentimento: I am sad = eu estou triste.',i:[
+ ['sad','triste','😢'],['angry','bravo','😠'],['scared','com medo','😨'],['sick','doente','🤒'],['bored','entediado','😑'],['I am sad.','Eu estou triste.','😢']]},
+{t:'Como é?',e:'📏',d:'A característica vem antes da coisa: big house = casa grande.',i:[
+ ['big','grande','🐘'],['small','pequeno','🐭'],['good','bom','👍'],['bad','ruim','👎'],['new','novo','✨'],['old','velho','👴']]},
+{t:'Cômodos da casa',e:'🚽',d:'Where is…? = Onde fica…? Serve para perguntar de qualquer lugar.',i:[
+ ['bathroom','banheiro','🚽'],['bedroom','quarto','🛏️'],['living room','sala','🛋️'],['window','janela','🪟'],['floor','chão','🟫'],['Where is the bathroom?','Onde fica o banheiro?','🚽']]},
+{t:'Transporte',e:'🚌',d:'Dizemos "by bus" (de ônibus), mas "on foot" (a pé).',i:[
+ ['bus','ônibus','🚌'],['car','carro','🚗'],['train','trem','🚆'],['bike','bicicleta','🚲'],['taxi','táxi','🚕'],['on foot','a pé','🚶']]},
+{t:'Direções',e:'🧭',d:'Right quer dizer "direita" e também "certo".',i:[
+ ['left','esquerda','⬅️'],['right','direita','➡️'],['straight ahead','em frente','⬆️'],['near','perto','📍'],['far','longe','🗺️'],['Turn left.','Vire à esquerda.','↩️']]},
+{t:'Perguntando o caminho',e:'🗺️',d:'Junte o que já sabe: Where is + lugar?',i:[
+ ['Where is the hospital?','Onde fica o hospital?','🏥'],['Is it far?','É longe?','🗺️'],['It is near here.','É perto daqui.','📍'],['Go straight ahead.','Siga em frente.','⬆️'],['It is on the right.','Fica à direita.','➡️']]},
+{t:'Telefone',e:'📱',d:'Para dizer números de telefone, fale um número de cada vez.',i:[
+ ['phone number','número de telefone','📱'],['What is your phone number?','Qual é o seu número de telefone?','📞'],['Call me.','Me ligue.','📞'],['Send a message.','Mande uma mensagem.','💬'],['I will call you later.','Eu ligo para você mais tarde.','⏳']]},
+{t:'Meses (1ª parte)',e:'🗓️',d:'Os meses também começam com letra maiúscula.',i:[
+ ['January','janeiro','🗓️'],['February','fevereiro','🗓️'],['March','março','🗓️'],['April','abril','🗓️'],['May','maio','🗓️'],['June','junho','🗓️']]},
+{t:'Meses (2ª parte)',e:'🎄',d:'Para datas: in May = em maio.',i:[
+ ['July','julho','🗓️'],['August','agosto','🗓️'],['September','setembro','🗓️'],['October','outubro','🗓️'],['November','novembro','🗓️'],['December','dezembro','🎄']]},
+{t:'Revisão do nível 2',e:'🏅',prova:1,d:'Revise o nível 2. Acertando, você passa para o nível 3!',i:[]},
+/* ===== NÍVEL 3 ===== */
+{t:'Profissões',e:'👷',d:'Para dizer a profissão: I am a + profissão.',i:[
+ ['teacher','professor','👩‍🏫'],['doctor','médico','👨‍⚕️'],['nurse','enfermeiro','👩‍⚕️'],['driver','motorista','🚗'],['cook','cozinheiro','👨‍🍳'],['cleaner','faxineiro','🧹']]},
+{t:'Meu trabalho',e:'💼',d:'What do you do? é a forma comum de perguntar a profissão.',i:[
+ ['I work in a restaurant.','Eu trabalho em um restaurante.','🍽️'],['What do you do?','O que você faz?','❓'],['I am a driver.','Eu sou motorista.','🚗'],['I work every day.','Eu trabalho todo dia.','🔁'],['I am looking for a job.','Eu estou procurando emprego.','🔎']]},
+{t:'Atendendo o cliente',e:'🛎️',d:'Frases curtas e educadas para qualquer atendimento.',i:[
+ ['Can I help you?','Posso ajudar você?','🙋'],['One moment, please.','Um momento, por favor.','⏳'],['Here you are.','Aqui está.','🤲'],['Have a nice day!','Tenha um bom dia!','🌞'],['Come back soon!','Volte logo!','👋']]},
+{t:'Restaurante: o garçom',e:'🧑‍🍳',d:'Menu = cardápio. Bill = conta.',i:[
+ ['Table for two?','Mesa para dois?','🍽️'],['Here is the menu.','Aqui está o cardápio.','📋'],['What would you like?','O que você gostaria?','❓'],['Anything else?','Mais alguma coisa?','➕'],['The bill, please.','A conta, por favor.','🧾']]},
+{t:'Restaurante: o cliente',e:'🍗',d:'I would like (eu gostaria) é mais educado que I want (eu quero).',i:[
+ ['I would like a juice.','Eu gostaria de um suco.','🧃'],['chicken','frango','🍗'],['meat','carne','🥩'],['salad','salada','🥗'],['It is delicious.','Está delicioso.','😋']]},
+{t:'Hotel',e:'🏨',d:'Room é quarto de hotel; bedroom é o quarto de dormir da casa.',i:[
+ ['reservation','reserva','📝'],['room','quarto','🚪'],['key','chave','🔑'],['I have a reservation.','Eu tenho uma reserva.','📝'],['Breakfast is at seven.','O café da manhã é às sete.','🍳']]},
+{t:'Entregas',e:'🛵',d:'Order = pedido. Outside = lá fora.',i:[
+ ['Your order is here.','Seu pedido chegou.','📦'],['I am outside.','Eu estou lá fora.','🚪'],['I am arriving.','Estou chegando.','🛵'],['Where can I leave it?','Onde posso deixar?','📍'],['address','endereço','🏠']]},
+{t:'Motorista',e:'🚕',d:'Seat belt = cinto de segurança.',i:[
+ ['Where are you going?','Para onde você vai?','🗺️'],['Please fasten your seat belt.','Por favor, coloque o cinto.','🔒'],['We are here.','Chegamos.','📍'],['traffic','trânsito','🚦'],['airport','aeroporto','✈️']]},
+{t:'Na loja',e:'👗',d:'Try on = provar roupa.',i:[
+ ['size','tamanho','📏'],['Can I try it on?','Posso experimentar?','👚'],['It is too small.','Está pequeno demais.','🤏'],['Do you have it in blue?','Você tem em azul?','🔵'],['fitting room','provador','🚪']]},
+{t:'Saúde',e:'💊',d:'I have a + dor: I have a headache = estou com dor de cabeça.',i:[
+ ['I am sick.','Eu estou doente.','🤒'],['I have a headache.','Eu estou com dor de cabeça.','🤕'],['I need a doctor.','Eu preciso de um médico.','👨‍⚕️'],['medicine','remédio','💊'],['pharmacy','farmácia','🏪']]},
+{t:'Emergência',e:'🚨',d:'Nos Estados Unidos, o número de emergência é 911.',i:[
+ ['Help!','Socorro!','🆘'],['Call the police!','Chame a polícia!','🚓'],['Call an ambulance!','Chame uma ambulância!','🚑'],['fire','fogo','🔥'],['I am lost.','Eu estou perdido.','🗺️'],['It is an emergency.','É uma emergência.','🚨']]},
+{t:'Documentos',e:'🪪',d:'Last name = sobrenome. First name = primeiro nome.',i:[
+ ['passport','passaporte','🛂'],['ID card','carteira de identidade','🪪'],['last name','sobrenome','📛'],['Sign here.','Assine aqui.','✍️'],['Fill out this form.','Preencha este formulário.','📄']]},
+{t:'Mais ações',e:'🔁',d:'Open e close são opostos, como buy e sell.',i:[
+ ['go','ir','➡️'],['come','vir','⬅️'],['buy','comprar','🛍️'],['sell','vender','🏷️'],['open','abrir','🔓'],['close','fechar','🔒']]},
+{t:'Poder: can',e:'💪',d:"Can = posso, consigo, sei. Can't = não posso, não consigo.",i:[
+ ['I can help.','Eu posso ajudar.','🙋'],["I can't swim.",'Eu não sei nadar.','🏊'],['Can you help me?','Você pode me ajudar?','🤝'],['Can I come in?','Posso entrar?','🚪'],['You can sit here.','Você pode sentar aqui.','🪑']]},
+{t:'Tempo livre',e:'⚽',d:"Let's = vamos. Let's go! = Vamos!",i:[
+ ['I like music.','Eu gosto de música.','🎵'],['soccer','futebol','⚽'],['movie','filme','🎬'],['beach','praia','🏖️'],['party','festa','🎉'],["Let's go!",'Vamos!','🏃']]},
+{t:'Dinheiro',e:'💰',d:'Save money = guardar, economizar dinheiro.',i:[
+ ['money','dinheiro','💰'],['I need money.','Eu preciso de dinheiro.','💸'],['price','preço','🏷️'],['account','conta (de banco)','🏦'],['save money','economizar dinheiro','🐷']]},
+{t:'No trabalho',e:'🗂️',d:'Boss = chefe. Coworker = colega de trabalho.',i:[
+ ['boss','chefe','🧑‍💼'],['coworker','colega de trabalho','🧑‍🤝‍🧑'],['meeting','reunião','👥'],['I am late.','Estou atrasado.','⏰'],['Sorry I am late.','Desculpe o atraso.','🙏'],['What time do we start?','Que horas a gente começa?','🕗']]},
+{t:'Combinando horários',e:'📆',d:'See you = até. See you on Monday! = Até segunda!',i:[
+ ['appointment','consulta, horário marcado','📆'],['Are you free tomorrow?','Você está livre amanhã?','❓'],['I am busy.','Estou ocupado.','🏃'],['next week','semana que vem','➡️'],['See you on Monday!','Até segunda!','👋']]},
+{t:'Meu, seu, dele',e:'🫵',d:'His é "dele" e her é "dela".',i:[
+ ['my','meu, minha','🙋'],['your','seu, sua','👉'],['his','dele','👨'],['her','dela','👩'],['our','nosso, nossa','👫'],['their','deles, delas','👥']]},
+{t:'Revisão do nível 3',e:'🏅',prova:1,d:'Revise o nível 3. Acertando, você passa para o último nível!',i:[]},
+/* ===== NÍVEL 4 ===== */
+{t:'Passado: was e were',e:'⏪',d:'Was = era, estava, foi (com I, he, she). Were = com you, we, they.',i:[
+ ['I was tired.','Eu estava cansado.','😴'],['It was good.','Foi bom.','👍'],['Where were you?','Onde você estava?','❓'],['We were at home.','Nós estávamos em casa.','🏠'],['Yesterday was Sunday.','Ontem foi domingo.','📅']]},
+{t:'O que eu fiz',e:'✅',d:'Muitos verbos no passado ganham "ed": work, worked. Outros mudam: go, went.',i:[
+ ['I worked yesterday.','Eu trabalhei ontem.','🛠️'],['I went to the market.','Eu fui ao mercado.','🛒'],['I ate rice.','Eu comi arroz.','🍚'],['I saw a movie.','Eu vi um filme.','🎬'],['I bought shoes.','Eu comprei sapatos.','👞']]},
+{t:'Perguntas no passado',e:'❔',d:'Para perguntar no passado, use Did: Did you eat? = Você comeu?',i:[
+ ['Did you eat?','Você comeu?','🍽️'],['Yes, I did.','Sim, comi.','👍'],["No, I didn't.",'Não, não comi.','👎'],['What did you do?','O que você fez?','❓'],['Did you sleep well?','Você dormiu bem?','😴']]},
+{t:'O futuro',e:'⏩',d:'Will e going to falam do futuro: I will travel = eu vou viajar.',i:[
+ ['I will travel.','Eu vou viajar.','✈️'],['I am going to work tomorrow.','Eu vou trabalhar amanhã.','🛠️'],['See you later!','Até mais tarde!','👋'],['Will you come?','Você vem?','❓'],['next year','ano que vem','📅']]},
+{t:'Fazendo agora',e:'⏯️',d:'Ação acontecendo agora: am/is/are + verbo com "ing".',i:[
+ ['I am working.','Eu estou trabalhando.','🛠️'],['She is cooking.','Ela está cozinhando.','👩‍🍳'],['They are playing.','Eles estão brincando.','⚽'],['What are you doing?','O que você está fazendo?','❓'],['I am waiting for the bus.','Estou esperando o ônibus.','🚏']]},
+{t:'Família (2ª parte)',e:'👨‍👩‍👧',d:'Children é o plural de child (criança, filho).',i:[
+ ['husband','marido','🤵'],['wife','esposa','👰'],['children','filhos','👧'],['grandmother','avó','👵'],['grandfather','avô','👴'],['I have two children.','Eu tenho dois filhos.','👦']]},
+{t:'Como a pessoa é',e:'🧍',d:'Hair (cabelo) não tem plural em inglês: long hair.',i:[
+ ['tall','alto','🦒'],['short','baixo','🐾'],['young','jovem','🧒'],['kind','gentil','💗'],['She has long hair.','Ela tem cabelo comprido.','👩‍🦰'],['He is very funny.','Ele é muito engraçado.','😂']]},
+{t:'Convites',e:'💌',d:'Para recusar com educação: I can\'t, sorry.',i:[
+ ['Do you want to go to the beach?','Você quer ir à praia?','🏖️'],['Sure!','Claro!','👍'],["I can't, sorry.",'Não posso, desculpe.','🙏'],['Maybe tomorrow.','Talvez amanhã.','🤔'],['What time?','Que horas?','⌚']]},
+{t:'Dando opinião',e:'💭',d:'I think = eu acho. I agree = eu concordo.',i:[
+ ['I think so.','Acho que sim.','👍'],["I don't think so.",'Acho que não.','👎'],['I agree.','Eu concordo.','🤝'],['It is a good idea.','É uma boa ideia.','💡'],['I prefer coffee.','Eu prefiro café.','☕']]},
+{t:'Comparando',e:'⚖️',d:'Than = do que: faster than = mais rápido do que.',i:[
+ ['bigger','maior','🐘'],['smaller','menor','🐭'],['better','melhor','👍'],['worse','pior','👎'],['The car is faster than the bike.','O carro é mais rápido do que a bicicleta.','🚗']]},
+{t:'Com que frequência',e:'🔁',d:'A palavra de frequência vem antes do verbo: I always drink.',i:[
+ ['always','sempre','🔁'],['sometimes','às vezes','🔀'],['never','nunca','🚫'],['usually','geralmente','📆'],['I always drink coffee.','Eu sempre bebo café.','☕']]},
+{t:'Viagem',e:'✈️',d:'Gate = portão de embarque no aeroporto.',i:[
+ ['ticket','passagem','🎫'],['suitcase','mala','🧳'],['flight','voo','✈️'],['Where is gate five?','Onde fica o portão cinco?','🚪'],['I am on vacation.','Estou de férias.','🏖️']]},
+{t:'Pedindo favor',e:'🙏',d:'Could you…? é a forma mais educada de pedir.',i:[
+ ['Could you help me?','Você poderia me ajudar?','🙏'],['Can you open the door?','Você pode abrir a porta?','🚪'],['Of course.','Claro.','👍'],['No problem.','Sem problema.','👌'],['Thanks a lot!','Muito obrigado!','😊']]},
+{t:'Resolvendo problemas',e:'🔧',d:'Manager = gerente. Refund = reembolso, dinheiro de volta.',i:[
+ ['There is a problem.','Tem um problema.','⚠️'],["It doesn't work.",'Não funciona.','🔧'],['I want to change this.','Eu quero trocar isto.','🔄'],['Can I speak to the manager?','Posso falar com o gerente?','🧑‍💼'],['refund','reembolso','💵']]},
+{t:'Entrevista de emprego',e:'📝',d:'Hard worker = pessoa trabalhadora, que se esforça.',i:[
+ ['I have experience.','Eu tenho experiência.','📈'],['I am a hard worker.','Eu sou trabalhador.','💪'],['I can start tomorrow.','Eu posso começar amanhã.','📅'],['Why do you want this job?','Por que você quer este emprego?','❓'],['I learn fast.','Eu aprendo rápido.','⚡']]},
+{t:'Falando de mim',e:'🙋',d:'Para a idade: I am + número + years old.',i:[
+ ['I live in São Paulo.','Eu moro em São Paulo.','🏙️'],['I have a dog.','Eu tenho um cachorro.','🐶'],['I am thirty years old.','Eu tenho trinta anos.','🎂'],['I like to cook.','Eu gosto de cozinhar.','🍳'],['My favorite color is blue.','Minha cor favorita é azul.','🔵']]},
+{t:'Celular e internet',e:'📶',d:'Password = senha. Charger = carregador.',i:[
+ ['password','senha','🔑'],['What is the Wi-Fi password?','Qual é a senha do Wi-Fi?','📶'],['My phone is dead.','Meu celular descarregou.','🪫'],['charger','carregador','🔌'],['Can I charge my phone?','Posso carregar meu celular?','🔋']]},
+{t:'Datas especiais',e:'🎂',d:'Estas frases servem para festas e despedidas.',i:[
+ ['Congratulations!','Parabéns!','🎉'],['Happy birthday!','Feliz aniversário!','🎂'],['Good luck!','Boa sorte!','🍀'],['Take care!','Se cuida!','💗'],['Welcome!','Bem-vindo!','🤗']]},
+{t:'Uma conversa inteira',e:'🗣️',d:'Junte tudo! Esta é uma conversa completa entre duas pessoas.',i:[
+ ['Hi! How are you?','Oi! Como você está?','👋'],['I am good, thanks. And you?','Estou bem, obrigado. E você?','😊'],['I am fine. What is your name?','Estou bem. Qual é o seu nome?','❓'],['My name is Carlos. Nice to meet you.','Meu nome é Carlos. Prazer em conhecer você.','🤝'],['Nice to meet you too.','Prazer em conhecer você também.','😀']]},
+{t:'Revisão do nível 4',e:'🏅',prova:1,d:'Revise o nível 4. Acertando, você passa para o nível 5: vendas e compras!',i:[]},
+/* ===== NÍVEL 5: VENDAS E COMPRAS ===== */
+{t:'No supermercado',e:'🛒',d:'Cashier é a pessoa do caixa. Receipt é a nota ou o recibo.',i:[
+ ['aisle','corredor','🛣️'],['shopping cart','carrinho de compras','🛒'],['basket','cesta','🧺'],['cashier','operador de caixa','🧑‍💼'],['receipt','nota, recibo','🧾'],['Where is the rice?','Onde fica o arroz?','🍚']]},
+{t:'Seções do mercado',e:'🥖',d:'Bakery é padaria. Butcher é açougue.',i:[
+ ['bakery','padaria','🥖'],['butcher','açougue','🥩'],['fruits and vegetables','frutas e verduras','🥦'],['frozen food','congelados','🧊'],['cleaning products','produtos de limpeza','🧴'],['It is in aisle three.','Fica no corredor três.','3️⃣']]},
+{t:'Quantidades',e:'⚖️',d:'A dozen = uma dúzia, 12 unidades.',i:[
+ ['a kilo of rice','um quilo de arroz','🍚'],['a dozen eggs','uma dúzia de ovos','🥚'],['a bottle of water','uma garrafa de água','🍶'],['a can of soda','uma lata de refrigerante','🥫'],['a box of milk','uma caixa de leite','🥛'],['half','metade','🌗']]},
+{t:'Promoções',e:'🏷️',d:'On sale = em promoção. Off = de desconto: 20% off.',i:[
+ ['sale','liquidação, promoção','🏷️'],['discount','desconto','💲'],['It is on sale.','Está em promoção.','🏷️'],['twenty percent off','vinte por cento de desconto','📉'],['Buy one, get one free.','Compre um, leve outro grátis.','🎁']]},
+{t:'Trabalhando no caixa',e:'🧾',d:'Next, please! é como o caixa chama o próximo cliente.',i:[
+ ['Next, please!','Próximo, por favor!','➡️'],['Do you need a bag?','Precisa de sacola?','🛍️'],['Cash or card?','Dinheiro ou cartão?','💳'],['Insert your card.','Insira o seu cartão.','💳'],['Enter your PIN.','Digite a sua senha.','🔢'],['Here is your receipt.','Aqui está a sua nota.','🧾']]},
+{t:'No shopping',e:'🏬',d:'Shopping, em inglês, é o ato de fazer compras. O prédio se chama mall.',i:[
+ ['mall','shopping','🏬'],['store','loja','🏪'],['food court','praça de alimentação','🍔'],['escalator','escada rolante','↗️'],['elevator','elevador','🛗'],['parking lot','estacionamento','🅿️']]},
+{t:'Sendo vendedor',e:'🧑‍💼',d:'Frases simpáticas ajudam a vender mais.',i:[
+ ['Are you looking for something?','Está procurando alguma coisa?','🔎'],['Let me show you.','Deixa eu te mostrar.','👉'],['This one is very popular.','Este é muito procurado.','⭐'],['What size do you wear?','Que tamanho você usa?','📏'],['It looks great on you.','Ficou ótimo em você.','😍']]},
+{t:'Sendo cliente',e:'🛍️',d:'Installments = parcelas. I will take it = vou levar.',i:[
+ ['I am just looking.','Só estou olhando.','👀'],['How much is this shirt?','Quanto custa esta camisa?','👕'],['Can I get a discount?','Pode me dar um desconto?','💲'],['I will take it.','Vou levar.','👍'],['Can I pay in installments?','Posso pagar parcelado?','💳']]},
+{t:'Trocas e devoluções',e:'🔄',d:'Return = devolver. Exchange = trocar.',i:[
+ ['I want to return this.','Quero devolver isto.','↩️'],['Can I exchange it?','Posso trocar?','🔄'],['Do you have the receipt?','Você tem a nota?','🧾'],['It is broken.','Está quebrado.','💔'],['You can choose another one.','Você pode escolher outro.','👉']]},
+{t:'Palavras de vendas',e:'📦',d:'Customer = cliente. Seller = vendedor.',i:[
+ ['customer','cliente','🧑'],['seller','vendedor','🧑‍💼'],['product','produto','📦'],['quality','qualidade','🏅'],['warranty','garantia','🛡️'],['delivery','entrega','🚚']]},
+{t:'Convencendo o cliente',e:'🤝',d:'Fale das vantagens: preço, qualidade, garantia e entrega.',i:[
+ ['It is the best price.','É o melhor preço.','💲'],['It is good quality.','É de boa qualidade.','🏅'],['It has a one-year warranty.','Tem garantia de um ano.','🛡️'],['We deliver today.','Entregamos hoje.','🚚'],['You will love it.','Você vai adorar.','😍']]},
+{t:'Vendendo pelo WhatsApp',e:'💬',d:'Order = pedido. Send = mandar.',i:[
+ ['How can I help you?','Como posso ajudar?','🙋'],['I will send you a photo.','Vou te mandar uma foto.','📷'],['Do you want to order?','Quer fazer o pedido?','📝'],['What is your address?','Qual é o seu endereço?','🏠'],['Thank you for your order!','Obrigado pelo seu pedido!','🙏']]},
+{t:'Atendendo o telefone',e:'☎️',d:'Spell = soletrar, dizer letra por letra.',i:[
+ ['Please hold.','Aguarde, por favor.','⏳'],['Who is speaking?','Quem está falando?','❓'],['Can you spell your name?','Pode soletrar o seu nome?','🔤'],['I will transfer you.','Vou transferir a ligação.','🔀'],['Thanks for calling.','Obrigado por ligar.','📞']]},
+{t:'Na feira',e:'🍅',d:'Fresh = fresco. Ripe = maduro.',i:[
+ ['fresh','fresco','🥬'],['ripe','maduro','🍌'],['Is it fresh?','Está fresco?','❓'],['Two for five dollars.','Dois por cinco dólares.','💵'],['Do you want to taste it?','Quer provar?','😋']]},
+{t:'Na lanchonete',e:'🍔',d:'To go = para viagem. For here = para comer aqui.',i:[
+ ['To go or for here?','Para viagem ou para comer aqui?','🥡'],['to go','para viagem','🥡'],['for here','para comer aqui','🍽️'],['small, medium or large','pequeno, médio ou grande','🥤'],['Anything to drink?','Alguma coisa para beber?','🥤']]},
+{t:'Números grandes',e:'💰',d:'Hundred = cem, centena. Thousand = mil.',i:[
+ ['two hundred','duzentos','💯'],['five hundred','quinhentos','💯'],['one thousand','mil','💰'],['It costs ninety-nine dollars.','Custa noventa e nove dólares.','🏷️'],['The total is fifty dollars.','O total é cinquenta dólares.','🧾']]},
+{t:'Cliente reclamando',e:'😤',d:'Ouvir com calma e dizer "I am sorry" já ajuda muito.',i:[
+ ['I am sorry about that.','Sinto muito por isso.','😔'],['Let me check.','Deixa eu verificar.','🔎'],['I will solve it for you.','Vou resolver para você.','🔧'],['Thank you for your patience.','Obrigado pela paciência.','🙏'],['Is there anything else I can do?','Posso fazer mais alguma coisa?','🙋']]},
+{t:'Horário de funcionamento',e:'🕘',d:'Open = aberto. Closed = fechado.',i:[
+ ['open','aberto','🟢'],['closed','fechado','🔴'],['What time do you open?','Que horas vocês abrem?','🕘'],['We close at ten.','Fechamos às dez.','🔟'],['We are open on Sundays.','Abrimos aos domingos.','📅']]},
+{t:'Compras pela internet',e:'💻',d:'Shipping = frete. Free shipping = frete grátis.',i:[
+ ['online store','loja online','💻'],['free shipping','frete grátis','🚚'],['add to cart','adicionar ao carrinho','🛒'],['tracking code','código de rastreio','🔎'],['My order did not arrive.','Meu pedido não chegou.','📦']]},
+{t:'Revisão do nível 5',e:'🏅',prova:1,d:'Revise vendas e compras. Acertando, você passa para o último nível: notícias!',i:[]},
+/* ===== NÍVEL 6: NOTÍCIAS FÁCEIS ===== */
+{t:'Palavras das notícias',e:'📰',d:'As notícias desta parte são de treino: foram inventadas para você estudar, com palavras fáceis.',i:[
+ ['news','notícias','📰'],['government','governo','🏛️'],['president','presidente','🧑‍💼'],['city','cidade','🏙️'],['country','país','🗺️']],
+ txt:{en:'Today\'s news: the city has a new hospital. It opens on Monday. Many people are happy.',pt:'Notícias de hoje: a cidade tem um novo hospital. Ele abre na segunda-feira. Muitas pessoas estão felizes.',q:'O que a cidade tem de novo?',ok:'Um hospital',w:['Uma escola','Um mercado']}},
+{t:'O tempo nas notícias',e:'⛈️',d:'Weather = o tempo (sol, chuva). Não confunda com time (horas).',i:[
+ ['weather','tempo (clima)','🌦️'],['storm','tempestade','⛈️'],['flood','enchente','🌊'],['heat wave','onda de calor','🥵'],['strong wind','vento forte','💨']],
+ txt:{en:'A big storm is coming to the south. There will be rain and strong wind tonight. People must stay at home.',pt:'Uma grande tempestade está chegando ao sul. Vai ter chuva e vento forte hoje à noite. As pessoas devem ficar em casa.',q:'O que as pessoas devem fazer?',ok:'Ficar em casa',w:['Ir à praia','Viajar']}},
+{t:'Economia',e:'📈',d:'Go up = subir. Go down = cair, baixar.',i:[
+ ['prices','preços','🏷️'],['go up','subir','📈'],['go down','cair, baixar','📉'],['salary','salário','💵'],['families','famílias','👪']],
+ txt:{en:'Food prices go up this month. Rice and beans cost more. Many families buy less food.',pt:'Os preços da comida sobem este mês. Arroz e feijão custam mais. Muitas famílias compram menos comida.',q:'O que aconteceu com os preços?',ok:'Subiram',w:['Caíram','Ficaram iguais']}},
+{t:'Emprego',e:'🏭',d:'Hire = contratar. Apply = se candidatar à vaga.',i:[
+ ['jobs','empregos','💼'],['company','empresa','🏢'],['factory','fábrica','🏭'],['hire','contratar','🤝'],['apply online','se candidatar pela internet','💻']],
+ txt:{en:'A new factory opens in the city. The company will hire five hundred workers. People can apply online.',pt:'Uma nova fábrica abre na cidade. A empresa vai contratar quinhentos trabalhadores. As pessoas podem se candidatar pela internet.',q:'Quantos trabalhadores a empresa vai contratar?',ok:'Quinhentos',w:['Cinquenta','Cinco mil']}},
+{t:'Saúde',e:'💉',d:'Free = grátis (e também "livre").',i:[
+ ['health','saúde','❤️'],['vaccine','vacina','💉'],['flu','gripe','🤧'],['free','grátis','🆓'],['health center','posto de saúde','🏥']],
+ txt:{en:'The flu vaccine campaign starts on Monday. The vaccine is free at health centers. Children and older people go first.',pt:'A campanha de vacina contra a gripe começa na segunda-feira. A vacina é grátis nos postos de saúde. Crianças e idosos vão primeiro.',q:'Onde a vacina é grátis?',ok:'Nos postos de saúde',w:['Nas farmácias','Nos mercados']}},
+{t:'Esportes',e:'⚽',d:'Win = ganhar. Lose = perder. Team = time.',i:[
+ ['game','jogo','🎮'],['team','time','👕'],['win','ganhar','🏆'],['lose','perder','😞'],['fans','torcedores','📣']],
+ txt:{en:'Brazil plays against Argentina tonight. The game starts at nine. The fans are excited.',pt:'O Brasil joga contra a Argentina hoje à noite. O jogo começa às nove. Os torcedores estão animados.',q:'Que horas começa o jogo?',ok:'Às nove',w:['Às sete','Às dez']}},
+{t:'Trânsito',e:'🚧',d:'Traffic jam = engarrafamento.',i:[
+ ['accident','acidente','💥'],['road','estrada','🛣️'],['traffic jam','engarrafamento','🚗'],['truck','caminhão','🚚'],['drivers','motoristas','🧑‍✈️']],
+ txt:{en:'There is a traffic jam on the main road. A truck broke down. The police ask drivers to use another road.',pt:'Tem um engarrafamento na estrada principal. Um caminhão quebrou. A polícia pede aos motoristas para usar outra estrada.',q:'O que a polícia pede?',ok:'Que os motoristas usem outra estrada',w:['Que dirijam mais rápido','Que voltem para casa']}},
+{t:'Educação',e:'🎓',d:'Enroll = fazer a matrícula. Course = curso.',i:[
+ ['students','estudantes','🧑‍🎓'],['classes','aulas','📚'],['exam','prova','📝'],['course','curso','🎓'],['enroll','fazer a matrícula','✍️']],
+ txt:{en:'The city offers a free English course for adults. Classes are at night. You can enroll at the community center.',pt:'A cidade oferece um curso de inglês grátis para adultos. As aulas são à noite. Você pode fazer a matrícula no centro comunitário.',q:'Quando são as aulas?',ok:'À noite',w:['De manhã','Aos domingos']}},
+{t:'Tecnologia e golpes',e:'📲',d:'Scam = golpe. Link = endereço da internet para clicar.',i:[
+ ['app','aplicativo','📲'],['scam','golpe','⚠️'],['fake','falso','🎭'],['link','link','🔗'],['update','atualização','🔄']],
+ txt:{en:'Police warn about a new phone scam. Criminals send fake messages about prizes. Do not click on strange links.',pt:'A polícia alerta para um novo golpe pelo celular. Criminosos mandam mensagens falsas sobre prêmios. Não clique em links estranhos.',q:'O que você não deve fazer?',ok:'Clicar em links estranhos',w:['Atualizar o celular','Ligar para a família']}},
+{t:'Meio ambiente',e:'♻️',d:'Recycle = reciclar. Trash = lixo.',i:[
+ ['environment','meio ambiente','🌳'],['trash','lixo','🗑️'],['recycle','reciclar','♻️'],['forest','floresta','🌲'],['pollution','poluição','🏭']],
+ txt:{en:'The city starts a recycling program. People can put paper and plastic in blue bins. The goal is to reduce trash.',pt:'A cidade começa um programa de reciclagem. As pessoas podem colocar papel e plástico em lixeiras azuis. O objetivo é diminuir o lixo.',q:'Qual é o objetivo do programa?',ok:'Diminuir o lixo',w:['Vender plástico','Fechar o parque']}},
+{t:'Eleições',e:'🗳️',d:'Mayor = prefeito. Vote = votar.',i:[
+ ['election','eleição','🗳️'],['vote','votar','✅'],['mayor','prefeito','🏛️'],['law','lei','⚖️'],['citizens','cidadãos','👥']],
+ txt:{en:'The election is on Sunday. Citizens choose a new mayor. Voting starts at eight in the morning.',pt:'A eleição é no domingo. Os cidadãos escolhem um novo prefeito. A votação começa às oito da manhã.',q:'O que os cidadãos escolhem?',ok:'Um novo prefeito',w:['Um novo time','Uma nova escola']}},
+{t:'O mundo',e:'🌍',d:'Peace = paz. Agreement = acordo.',i:[
+ ['world','mundo','🌍'],['leaders','líderes','🧑‍💼'],['peace','paz','🕊️'],['agreement','acordo','📜'],['refugees','refugiados','🧳']],
+ txt:{en:'World leaders meet to talk about peace. They sign an agreement to give food and water to refugees.',pt:'Líderes do mundo se reúnem para falar de paz. Eles assinam um acordo para dar comida e água aos refugiados.',q:'O acordo serve para quê?',ok:'Dar comida e água aos refugiados',w:['Construir estradas','Vender carros']}},
+{t:'Ciência',e:'🔭',d:'Discover = descobrir. Scientists = cientistas.',i:[
+ ['scientists','cientistas','👩‍🔬'],['discover','descobrir','🔎'],['space','espaço','🌌'],['planet','planeta','🪐'],['Earth','Terra','🌎']],
+ txt:{en:'Scientists discover a new planet. It is very far from Earth. They say the planet is very hot.',pt:'Cientistas descobrem um novo planeta. Ele fica muito longe da Terra. Eles dizem que o planeta é muito quente.',q:'Como é o planeta?',ok:'Muito quente',w:['Muito frio','Perto da Terra']}},
+{t:'Cultura e eventos',e:'🎤',d:'Concert = show de música. Weekend = fim de semana.',i:[
+ ['festival','festival','🎪'],['concert','show','🎤'],['weekend','fim de semana','🗓️'],['museum','museu','🏛️'],['free entry','entrada grátis','🎟️']],
+ txt:{en:'There is a music festival this weekend in the park. Entry is free. The concert starts at six p.m.',pt:'Tem um festival de música neste fim de semana no parque. A entrada é grátis. O show começa às seis da tarde.',q:'Quanto custa a entrada?',ok:'É grátis',w:['Dez dólares','Cinco dólares']}},
+{t:'Segurança',e:'👮',d:'Thief = ladrão. Nobody = ninguém.',i:[
+ ['thief','ladrão','🦹'],['arrest','prender','👮'],['safe','seguro','🛡️'],['nobody','ninguém','🙅'],['hurt','machucado','🤕']],
+ txt:{en:'Police arrest a thief at a shopping mall. Nobody is hurt. The store gets the products back.',pt:'A polícia prende um ladrão num shopping. Ninguém se machucou. A loja recebe os produtos de volta.',q:'Alguém se machucou?',ok:'Não, ninguém',w:['Sim, um policial','Sim, um cliente']}},
+{t:'Notícias de negócios',e:'💼',d:'Sales = vendas. Grow = crescer.',i:[
+ ['sales','vendas','📊'],['grow','crescer','📈'],['customers','clientes','🧑‍🤝‍🧑'],['electronics','eletrônicos','📺'],['early','cedo','🌅']],
+ txt:{en:'Sales grow during Black Friday. Stores open early, and customers buy electronics and clothes.',pt:'As vendas crescem na Black Friday. As lojas abrem cedo, e os clientes compram eletrônicos e roupas.',q:'O que os clientes compram?',ok:'Eletrônicos e roupas',w:['Carros e casas','Livros e remédios']}},
+{t:'Transporte público',e:'🚇',d:'Strike = greve. Subway = metrô.',i:[
+ ['subway','metrô','🚇'],['strike','greve','✊'],['fare','tarifa, passagem','🎫'],['delay','atraso','⏳'],['normally','normalmente','✅']],
+ txt:{en:'Bus drivers are on strike today. There are fewer buses in the city. The subway works normally.',pt:'Os motoristas de ônibus estão em greve hoje. Há menos ônibus na cidade. O metrô funciona normalmente.',q:'O que funciona normalmente?',ok:'O metrô',w:['Os ônibus','Nenhum transporte']}},
+{t:'Ajuda e doações',e:'🤲',d:'Volunteers = voluntários. Shelter = abrigo.',i:[
+ ['donation','doação','🎁'],['volunteers','voluntários','🙋'],['shelter','abrigo','🏠'],['collect','recolher, juntar','📦'],['clothes','roupas','👚']],
+ txt:{en:'After the flood, many families need help. Volunteers collect food and clothes. You can donate at the city shelter.',pt:'Depois da enchente, muitas famílias precisam de ajuda. Voluntários juntam comida e roupas. Você pode doar no abrigo da cidade.',q:'Onde dá para doar?',ok:'No abrigo da cidade',w:['No banco','Na praia']}},
+{t:'Como ler notícias',e:'🗞️',d:'Quer ler notícias de verdade em inglês fácil? Depois do curso, experimente o site News in Levels, nível 1 (newsinlevels.com).',i:[
+ ['headline','manchete','🗞️'],['reporter','repórter','🎙️'],['breaking news','notícia urgente','🚨'],['according to','de acordo com','📌'],['source','fonte','🔗']],
+ txt:{en:'Breaking news: according to reporters, the bridge is closed for repairs. It opens again next week.',pt:'Notícia urgente: de acordo com os repórteres, a ponte está fechada para consertos. Ela abre de novo na semana que vem.',q:'Quando a ponte abre de novo?',ok:'Na semana que vem',w:['Hoje','Amanhã']}},
+{t:'Revisão final',e:'🏆',prova:1,d:'A última revisão do curso. Acertando, você ganha o certificado!',i:[]}
+
+];
+
+return {nome:'Inglês',min:'inglês',bandeira:'🇺🇸',voz:'en-US',exemplo:'Hello! How are you?',niveis:NIVEIS,licoes:LICOES};})();
+/* Para um novo idioma: crie cursos/espanhol.js no mesmo formato e acrescente CURSOS.es aqui. */
+
+
+const $=s=>document.querySelector(s);
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const ontem=()=>{const d=new Date(Date.now()-864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const POR_NIVEL=20;
+/* curso em uso (cada idioma tem o seu) */
+let CUR=null,LICOES=[],NIVEIS=[],TOTAL=0,ITENS=[],porId={};
+function usaCurso(cod){
+  CUR=CURSOS[cod]||CURSOS.en;LICOES=CUR.licoes;NIVEIS=CUR.niveis;TOTAL=LICOES.length;
+  ITENS=[];LICOES.forEach((L,l)=>L.i.forEach((it,k)=>ITENS.push({id:itemId(l,k),l,en:it[0],pt:it[1],em:it[2]||L.e})));   /* en = texto no idioma estudado */
+  porId=Object.fromEntries(ITENS.map(x=>[x.id,x]));
+}
+const itemId=(l,k)=>l+'.'+k;
+const nivelDe=i=>Math.min(NIVEIS.length-1,Math.floor(i/POR_NIVEL));
+function tela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.toggle('on',t.id===id));$('#rodape').style.display=id==='tela-licao'?'':'none';scrollTo(0,0);}
+function msg(sel,t,tipo){const e=$(sel);e.textContent=t||'';e.className='msg'+(tipo?' '+tipo:'');}
+
+/* ======================= VOZ ======================= */
+let vozes=[];
+function carregaVozes(){vozes=speechSynthesis.getVoices();}
+if('speechSynthesis' in window){carregaVozes();speechSynthesis.onvoiceschanged=carregaVozes;}
+function voz(lang){const pre=lang.slice(0,2);return vozes.find(v=>v.lang.replace('_','-')===lang)||vozes.find(v=>v.lang.startsWith(pre));}
+function fala(txt,lang,lento,fila){
+  if(!('speechSynthesis' in window))return;
+  if(!fila)speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);u.lang=lang||CUR.voz;const v=voz(u.lang);if(v)u.voice=v;
+  u.rate=u.lang!=='pt-BR'?(lento?0.55:(CONTA&&CONTA.cfg.lento?0.75:0.9)):1;
+  speechSynthesis.speak(u);
+}
+const ingles=(t,lento)=>fala(t,CUR.voz,lento);   /* fala no idioma estudado */
+function instrucao(t,depois){
+  if(CONTA&&CONTA.cfg.voz){fala(t,'pt-BR');if(depois)fala(depois,CUR.voz,false,true);}
+  else if(depois)ingles(depois);
+}
+const Reconhece=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+/* ======================= COMPARAR RESPOSTAS ======================= */
+const CONTR={"i'm":'i am',"you're":'you are',"we're":'we are',"they're":'they are',"he's":'he is',"she's":'she is',"it's":'it is',"that's":'that is',"what's":'what is',"where's":'where is',"don't":'do not',"doesn't":'does not',"didn't":'did not',"can't":'can not',"cannot":'can not',"won't":'will not',"isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"i'll":'i will',"you'll":'you will',"we'll":'we will',"let's":'let us',"i've":'i have',"i'd":'i would',"couldn't":'could not'};
+function norm(s){
+  s=String(s).toLowerCase().replace(/[’‘`´]/g,"'").normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  s=s.replace(/-/g,'').replace(/[.,!?¿¡;:"()]/g,' ').replace(/\s+/g,' ').trim();
+  return s.split(' ').map(w=>CONTR[w]||w).join(' ');
+}
+function dist(a,b){const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
+function confere(resp,certa){const a=norm(resp),b=norm(certa);if(!a)return 0;if(a===b)return 2;
+  return dist(a,b)<=Math.max(1,Math.floor(b.length/10))?1:0;}  /* 2 = certo, 1 = quase (erro de digitação), 0 = errado */
+function confereFala(alts,certa){const alvo=norm(certa).split(' ');let melhor=0;
+  alts.forEach(t=>{const ouv=norm(t).split(' ');let ok=0;alvo.forEach(w=>{const k=ouv.indexOf(w);if(k>=0){ok++;ouv.splice(k,1);}});melhor=Math.max(melhor,ok/alvo.length);});return melhor;}
+
+/* ======================= CONTA E PROGRESSO ======================= */
+let P=null, CONTA=null, USER='', SENHA='';   /* CONTA = tudo do aluno; P = progresso do idioma em uso */
+const progVazio=()=>({lic:0,xp:0,seq:0,ultimo:'',licHoje:'',revHoje:'',feitas:{},it:{},certificado:''});
+const cfgVazia=()=>({voz:false,fala:!!Reconhece,lento:false});
+function normaliza(p){const v=progVazio();p=p&&typeof p==='object'?p:{};Object.assign(v,p);v.feitas=p.feitas||{};v.it=p.it||{};delete v.cfg;return v;}
+function normalizaConta(c){
+  c=c&&typeof c==='object'?c:{};
+  if(c.lic!=null&&!c.cursos)c={idioma:'en',cfg:c.cfg,cursos:{en:c}};   /* formato antigo, só inglês */
+  const cursos={};Object.keys(c.cursos||{}).forEach(k=>{if(CURSOS[k])cursos[k]=normaliza(c.cursos[k]);});
+  return {idioma:CURSOS[c.idioma]?c.idioma:'en',cfg:Object.assign(cfgVazia(),c.cfg||{}),cursos};
+}
+const chaveLocal=n=>'nb_prog_'+n.toLowerCase();
+function salvaLocal(){if(USER&&CONTA)try{localStorage.setItem(chaveLocal(USER),JSON.stringify(CONTA));}catch(e){}}
+function melhor(a,b){if(!a)return b;if(!b)return a;if(a.lic!==b.lic)return a.lic>b.lic?a:b;return (a.xp||0)>=(b.xp||0)?a:b;}
+function melhorConta(a,b){   /* junta o que está no servidor com o que está no aparelho, idioma por idioma */
+  if(!a)return b;if(!b)return a;const r=normalizaConta(a),o=normalizaConta(b);
+  Object.keys(o.cursos).forEach(k=>{r.cursos[k]=melhor(r.cursos[k],o.cursos[k]);});return r;
+}
+function abreCurso(cod){
+  CONTA.idioma=CURSOS[cod]?cod:'en';usaCurso(CONTA.idioma);
+  P=CONTA.cursos[CONTA.idioma]||(CONTA.cursos[CONTA.idioma]=progVazio());
+}
+async function hash(t){try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))|0;return 'x'+h;}}
+async function servidor(dados){
+  if(!SERVIDOR_URL)return servidorLocal(dados);
+  const r=await fetch(SERVIDOR_URL,{method:'POST',body:JSON.stringify(dados)});
+  return r.json();
+}
+/* sem servidor: as contas ficam guardadas só neste aparelho */
+async function servidorLocal(d){
+  let contas={};try{contas=JSON.parse(localStorage.getItem('nb_contas')||'{}');}catch(e){}
+  const k=d.nome.toLowerCase(),h=await hash(k+'|'+d.senha);
+  if(d.acao==='criar'){if(contas[k])return{ok:false,erro:'Esse nome de usuário já existe. Escolha outro, ou toque em Entrar.'};contas[k]={nome:d.nome,h};localStorage.setItem('nb_contas',JSON.stringify(contas));return{ok:true,nome:d.nome,progresso:null};}
+  if(!contas[k])return{ok:false,erro:'Não achei esse nome de usuário. Confira ou crie uma conta.'};
+  if(contas[k].h!==h)return{ok:false,erro:'Senha errada. Confira e tente de novo.'};
+  if(d.acao==='entrar')return{ok:true,nome:contas[k].nome,progresso:null};
+  return{ok:true};
+}
+let salvando=0,salvarDeNovo=false;
+function salvar(){
+  salvaLocal();if(!SERVIDOR_URL||!USER)return;
+  if(salvando){salvarDeNovo=true;return;}
+  salvando=1;
+  servidor({acao:'salvar',nome:USER,senha:SENHA,progresso:CONTA}).catch(()=>{}).finally(()=>{salvando=0;if(salvarDeNovo){salvarDeNovo=false;salvar();}});
+}
+function validaCampos(){
+  const nome=$('#lg-nome').value.trim(),senha=$('#lg-senha').value;
+  if(nome.length<2)return msg('#lg-msg','Escreva um nome de usuário com pelo menos 2 letras.','erro'),null;
+  if(!/^[\p{L}\p{N} ._-]+$/u.test(nome))return msg('#lg-msg','Use só letras, números, espaço, ponto ou traço no nome.','erro'),null;
+  if(senha.length<4)return msg('#lg-msg','A senha precisa ter pelo menos 4 letras ou números.','erro'),null;
+  return {nome,senha};
+}
+async function entrar(acao){
+  const c=validaCampos();if(!c)return;
+  msg('#lg-msg',acao==='criar'?'Criando sua conta…':'Entrando…');
+  $('#lg-entrar').disabled=$('#lg-criar').disabled=true;
+  try{
+    const r=await servidor({acao,nome:c.nome,senha:c.senha});
+    if(!r||!r.ok)throw new Error((r&&r.erro)||'Não foi possível entrar.');
+    USER=r.nome||c.nome;SENHA=c.senha;
+    let local=null;try{local=JSON.parse(localStorage.getItem(chaveLocal(USER))||'null');}catch(e){}
+    CONTA=normalizaConta(melhorConta(r.progresso,local));abreCurso(CONTA.idioma);
+    try{localStorage.setItem('nb_sessao',JSON.stringify({n:USER,s:SENHA}));}catch(e){}
+    salvar();$('#lg-senha').value='';msg('#lg-msg','');
+    inicio();
+    if(acao==='criar')modal(`<div style="font-size:3rem">🎉</div><h2>Conta criada!</h2><p>Bem-vindo(a), <b>${esc(USER)}</b>!</p><p>Você começa pelo <b>${CUR.bandeira} ${CUR.nome}</b>. Faça <b>uma lição por dia</b>: em poucos meses você vai entender e falar o básico.</p><p class="ajuda">Toque no 🔊 para ouvir as palavras quantas vezes quiser.</p><button class="btn" onclick="fechaModal()">Vamos começar!</button>`);
+  }catch(e){msg('#lg-msg',e.message==='Failed to fetch'?'Sem internet. Verifique a conexão e tente de novo.':e.message,'erro');}
+  finally{$('#lg-entrar').disabled=$('#lg-criar').disabled=false;}
+}
+$('#lg-entrar').onclick=()=>entrar('entrar');
+$('#lg-criar').onclick=()=>entrar('criar');
+$('#lg-senha').onkeydown=e=>{if(e.key==='Enter')entrar('entrar');};
+$('#lg-ver').onchange=e=>{$('#lg-senha').type=e.target.checked?'text':'password';};
+$('#lg-ouvir').onclick=()=>fala('Escreva o seu nome de usuário e a sua senha. Se for a primeira vez, toque em criar minha conta. Se já tem conta, toque em entrar. Marque mostrar a senha para ver o que você digitou.','pt-BR');
+$('#ini-sair').onclick=()=>{try{localStorage.removeItem('nb_sessao');}catch(e){}USER='';SENHA='';P=null;CONTA=null;tela('tela-login');};
+
+/* ======================= INÍCIO ======================= */
+function inicio(){
+  tela('tela-inicio');
+  const nv=nivelDe(Math.min(P.lic,TOTAL-1)),N=NIVEIS[nv],acabou=P.lic>=TOTAL;
+  const feitasNv=Math.min(POR_NIVEL,Math.max(0,P.lic-nv*POR_NIVEL));
+  $('#ini-ola').textContent='Olá, '+USER+'!';
+  $('#ini-idioma').innerHTML=CUR.bandeira+' '+CUR.nome+' <small>trocar ▾</small>';
+  $('#ini-nivel').innerHTML=`<div class="topo"><div><div style="font-weight:700;opacity:.9">Seu nível</div><div style="font-size:1.5rem;font-weight:800">Nível ${nv+1} de ${NIVEIS.length}</div><div style="font-weight:700">${N.n}</div></div><div class="grande">${acabou?'🏆':N.e}</div></div>
+    <div class="barra"><i style="width:${acabou?100:Math.round(feitasNv/POR_NIVEL*100)}%"></i></div>
+    <div style="font-weight:600">${acabou?'Curso concluído! Parabéns!':`${feitasNv} de ${POR_NIVEL} lições deste nível · lição ${P.lic+1} de ${TOTAL} do curso`}</div>`;
+  $('#ini-seq').textContent=P.seq&&(P.ultimo===hoje()||P.ultimo===ontem())?P.seq:0;
+  $('#ini-xp').textContent=P.xp;
+  $('#ini-feitas').textContent=Object.keys(P.feitas).length;
+  $('#tf-lic').classList.toggle('ok',P.licHoje===hoje());
+  const nRev=itensRevisao().length;
+  $('#tf-rev').classList.toggle('ok',P.revHoje===hoje()||nRev===0);
+  $('#tf-rev').querySelector('span:last-child').textContent=nRev?'Fazer a revisão':Object.keys(P.it).length?'Revisão em dia! 👍':'Revisão (aparece depois da 1ª lição)';
+  if(acabou){$('#ini-licao').textContent='🏆 Ver meu certificado';}
+  else{const L=LICOES[P.lic];$('#ini-licao').textContent=(P.licHoje===hoje()?'▶ Mais uma lição: ':'▶ Lição de hoje: ')+L.e+' '+L.t;}
+  $('#ini-rev').style.display=nRev?'':'none';
+  $('#ini-rev').textContent='🔁 Revisão ('+Math.min(10,nRev)+' itens)';
+  /* lista */
+  let h='';NIVEIS.forEach((N,n)=>{
+    h+=`<details class="nv" ${n===nv?'open':''}><summary>${N.e} Nível ${n+1}: ${N.n}</summary><ul class="lista-lic">`;
+    for(let i=n*POR_NIVEL;i<Math.min(TOTAL,(n+1)*POR_NIVEL);i++){const L=LICOES[i],f=P.feitas[i],bl=i>P.lic;
+      h+=`<li data-i="${i}" class="${bl?'bloq':''} ${i===P.lic?'atual':''}"><span class="em">${bl?'🔒':L.e}</span><span class="tx"><b>${i+1}. ${esc(L.t)}</b><br><small>${f?'⭐'.repeat(f)+' feita':i===P.lic?'Próxima lição':bl?'Bloqueada':''}</small></span>${!bl?'<span>▶</span>':''}</li>`;}
+    h+='</ul></details>';});
+  $('#ini-lista').innerHTML=h;
+  $('#cfg-voz').checked=CONTA.cfg.voz;$('#cfg-fala').checked=CONTA.cfg.fala&&!!Reconhece;$('#cfg-fala').disabled=!Reconhece;$('#cfg-lento').checked=CONTA.cfg.lento;
+  $('#cfg-aviso').textContent=Reconhece?'':'Este navegador não consegue ouvir o microfone. Use o Google Chrome no celular para os exercícios de falar.';
+}
+$('#ini-lista').onclick=e=>{const li=e.target.closest('li[data-i]');if(!li||li.classList.contains('bloq'))return;comecaLicao(+li.dataset.i);};
+$('#ini-licao').onclick=()=>{if(P.lic>=TOTAL)return certificado();comecaLicao(P.lic);};
+$('#ini-rev').onclick=()=>comecaRevisao();
+$('#cfg-voz').onchange=e=>{CONTA.cfg.voz=e.target.checked;salvar();if(CONTA.cfg.voz)fala('Pronto. Agora eu vou ler as instruções para você.','pt-BR');};
+$('#cfg-fala').onchange=e=>{CONTA.cfg.fala=e.target.checked;salvar();};
+$('#cfg-lento').onchange=e=>{CONTA.cfg.lento=e.target.checked;salvar();ingles(CUR.exemplo);};
+
+/* ======================= MONTAR EXERCÍCIOS ======================= */
+const ehFrase=it=>it.en.split(' ').length>=3;
+function distratores(it,campo,pool){
+  const vistos=new Set([norm(it[campo])]),out=[];
+  const fontes=[shuffle(pool.filter(x=>x.id!==it.id)),shuffle(ITENS.filter(x=>nivelDe(x.l)===nivelDe(it.l)&&x.id!==it.id&&ehFrase(x)===ehFrase(it))),shuffle(ITENS.slice())];
+  for(const f of fontes)for(const x of f){if(out.length>=2)break;const k=norm(x[campo]);if(!vistos.has(k)){vistos.add(k);out.push(x[campo]);}}
+  return out;
+}
+function tipoFacil(){return Math.random()<0.5?'ouvir':'traduzir';}
+function tipoDificil(it){
+  const t=['escrever','ditado'];if(ehFrase(it))t.push('montar','montar');if(CONTA.cfg.fala&&Reconhece)t.push('falar');
+  return t[rnd(t.length)];
+}
+let LC=null;   /* lição em andamento */
+function comecaLicao(idx){
+  const L=LICOES[idx];let fila=[];
+  if(L.prova){
+    const nv=nivelDe(idx),pool=shuffle(ITENS.filter(x=>nivelDe(x.l)===nv)).slice(0,15);
+    fila=pool.map(it=>({t:Math.random()<0.4?tipoFacil():tipoDificil(it),it,pool}));
+    shuffle(LICOES.filter((x,k)=>x.txt&&nivelDe(k)===nv)).slice(0,2).forEach(x=>fila.push({t:'leitura',L:x}));
+    shuffle(fila);
+  }else{
+    const pool=L.i.map((x,k)=>porId[itemId(idx,k)]);
+    pool.forEach(it=>{fila.push({t:'novo',it,pool});fila.push({t:tipoFacil(),it,pool});});
+    shuffle(pool.slice()).forEach(it=>fila.push({t:tipoDificil(it),it,pool}));
+    if(L.txt)fila.push({t:'leitura',L});
+  }
+  LC={idx,tipo:L.prova?'prova':'licao',fila,pos:0,acertos:0,total:0,repetidos:new Set(),erros:[]};
+  tela('tela-licao');
+  if(L.d)mostraDica(L);else proximo();
+}
+/* repetição espaçada: cada acerto aumenta o intervalo até a próxima revisão (1, 2, 4, 7, 15, 30 dias); cada erro volta para hoje */
+const INTERVALO=[0,1,2,4,7,15,30];
+const caixa=s=>s[3]!=null?s[3]:Math.max(0,Math.min(6,s[0]-s[1]));
+function itensRevisao(){
+  if(!P)return[];const agora=Date.now();
+  return ITENS.filter(x=>P.it[x.id]).map(x=>{const s=P.it[x.id],dias=(agora-(s[2]||0))/864e5,int=INTERVALO[caixa(s)];return {x,atraso:dias-int+0.1,int};})
+    .filter(o=>o.atraso>=0).sort((a,b)=>b.atraso/(a.int+1)-a.atraso/(b.int+1)).map(o=>o.x);
+}
+function comecaRevisao(){
+  const its=itensRevisao().slice(0,10);if(!its.length)return;
+  const fila=shuffle(its).map(it=>({t:Math.random()<0.4?tipoFacil():tipoDificil(it),it,pool:its}));
+  LC={idx:-1,tipo:'revisao',fila,pos:0,acertos:0,total:0,repetidos:new Set(),erros:[]};
+  tela('tela-licao');proximo();
+}
+function mostraDica(L){
+  $('#lc-prog').style.width='0%';
+  $('#lc-corpo').innerHTML=`<div class="centro" style="font-size:4rem;margin-top:20px">${L.e}</div><h1 class="centro">${esc(L.t)}</h1>
+    <div class="dica"><div class="instr" style="margin:0 0 6px">💡 Dica <button onclick="fala(this.parentNode.nextElementSibling.textContent,'pt-BR')" aria-label="Ouvir">🔊</button></div><div>${esc(L.d)}</div></div>
+    ${L.prova?'<p class="centro">Acerte pelo menos <b>7 de cada 10</b> para passar de nível. Se não der, é só tentar de novo.</p>':`<p class="centro">Nesta lição: <b>${L.i.length} palavras ou frases novas</b>.</p>`}`;
+  rodape('', '', 'Começar ➜', proximo);
+  if(CONTA.cfg.voz)fala(L.t+'. Dica: '+L.d,'pt-BR');
+}
+$('#lc-fechar').onclick=()=>{
+  modal(`<h2>Sair da lição?</h2><p>O que você fez nesta lição não será guardado.</p><button class="btn" onclick="fechaModal()">Continuar a lição</button><button class="btn claro" onclick="fechaModal();speechSynthesis&&speechSynthesis.cancel();inicio()">Sair</button>`);
+};
+
+/* ======================= TELA DE CADA EXERCÍCIO ======================= */
+let EX=null,resposta=null;
+function rodape(fb,fb2,txt,acao,estado,desab){
+  const r=$('#rodape');r.className='rodape'+(estado?' '+estado:'');r.style.display='';
+  $('#rd-fb').textContent=fb||'';$('#rd-fb2').innerHTML=fb2||'';
+  const b=$('#rd-btn');b.textContent=txt;b.disabled=!!desab;b.onclick=acao;
+}
+function liberaVerificar(on){$('#rd-btn').disabled=!on;}
+function instrHtml(t){return `<div class="instr"><span>${esc(t)}</span><button onclick="fala('${t.replace(/'/g,"\\'")}','pt-BR')" aria-label="Ouvir instrução">🔊</button></div>`;}
+function proximo(){
+  if(LC.pos>=LC.fila.length)return terminar();
+  EX=LC.fila[LC.pos];resposta=null;
+  $('#lc-prog').style.width=Math.round(LC.pos/LC.fila.length*100)+'%';
+  const it=EX.it,c=$('#lc-corpo');
+  if(EX.t==='leitura'){
+    const T=EX.L.txt,ops=shuffle([T.ok,...T.w]);
+    c.innerHTML=instrHtml('Leia e ouça a notícia. Depois responda.')+`<p class="ajuda">📰 Notícia de treino: inventada para você estudar.</p>
+      <div class="frase-pt" style="font-weight:600;color:var(--azul)">${esc(T.en)}</div>
+      <div class="sons"><button onclick="ingles(EX.L.txt.en)">🔊 Ouvir</button><button onclick="ingles(EX.L.txt.en,true)">🐢 Devagar</button></div>
+      <details><summary class="ajuda" style="cursor:pointer;font-weight:700">👀 Ver a tradução (tente entender antes!)</summary><p>${esc(T.pt)}</p></details>
+      <div class="instr" style="margin-top:16px"><span>${esc(T.q)}</span></div>
+      <div class="opcoes">${ops.map(o=>`<button data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+    c.querySelectorAll('.opcoes button').forEach(b=>b.onclick=()=>{c.querySelectorAll('.opcoes button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');resposta=b.dataset.o;liberaVerificar(true);});
+    rodape('','','Verificar',verificar,'',true);
+    instrucao('Leia e ouça a notícia. Depois responda: '+T.q,T.en);
+    return;
+  }
+  if(EX.t==='novo'){
+    c.innerHTML=instrHtml('Palavra nova! Ouça e repita em voz alta.')+`<div class="palavra"><div class="em">${it.em}</div><div class="en">${esc(it.en)}</div><div class="pt">${esc(it.pt)}</div></div>
+      <div class="sons"><button onclick="ingles(EX.it.en)">🔊 Ouvir</button><button onclick="ingles(EX.it.en,true)">🐢 Devagar</button></div>
+      <p class="ajuda centro">Repare em como se escreve: <b>${esc(it.en)}</b></p>`;
+    rodape('','','Entendi ➜',()=>{LC.pos++;proximo();});
+    instrucao('Palavra nova! Ouça e repita.',it.en);
+  }else if(EX.t==='ouvir'||EX.t==='traduzir'){
+    const campo=EX.t==='ouvir'?'pt':'en',certa=it[campo];
+    const ops=shuffle([certa,...distratores(it,campo,EX.pool)]);
+    c.innerHTML=(EX.t==='ouvir'?instrHtml('O que você ouviu? Escolha o significado.')+`<div class="sons"><button onclick="ingles(EX.it.en)">🔊 Ouvir de novo</button><button onclick="ingles(EX.it.en,true)">🐢</button></div>`
+      :instrHtml('Como se diz em '+CUR.min+'?')+`<div class="frase-pt">${it.em} ${esc(it.pt)}</div>`)
+      +`<div class="opcoes">${ops.map(o=>`<button data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+    c.querySelectorAll('.opcoes button').forEach(b=>b.onclick=()=>{c.querySelectorAll('.opcoes button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');resposta=b.dataset.o;liberaVerificar(true);if(EX.t==='traduzir')ingles(resposta);});
+    rodape('','','Verificar',verificar,'',true);
+    if(EX.t==='ouvir')instrucao('O que você ouviu?',it.en);else if(CONTA.cfg.voz)fala('Como se diz em '+CUR.min+': '+it.pt,'pt-BR');
+  }else if(EX.t==='montar'){
+    const blocos=shuffle(it.en.replace(/[.,!?]/g,'').split(/\s+/).map((w,i)=>({w,i})));
+    c.innerHTML=instrHtml('Monte a frase em '+CUR.min+'. Toque nas palavras na ordem certa.')+`<div class="frase-pt">${it.em} ${esc(it.pt)}</div><div class="montagem" id="mt-resp"></div><div class="blocos" id="mt-blocos">${blocos.map((b,k)=>`<button class="bloco" data-k="${k}">${esc(b.w)}</button>`).join('')}</div>`;
+    const escolha=[];
+    const desenha=()=>{$('#mt-resp').innerHTML=escolha.map((k,p)=>`<button class="bloco" data-p="${p}">${esc(blocos[k].w)}</button>`).join('');
+      c.querySelectorAll('#mt-blocos .bloco').forEach(b=>b.classList.toggle('usado',escolha.includes(+b.dataset.k)));
+      resposta=escolha.map(k=>blocos[k].w).join(' ');liberaVerificar(escolha.length===blocos.length);};
+    $('#mt-blocos').onclick=e=>{const b=e.target.closest('[data-k]');if(!b||escolha.includes(+b.dataset.k))return;escolha.push(+b.dataset.k);ingles(blocos[+b.dataset.k].w);desenha();};
+    $('#mt-resp').onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;escolha.splice(+b.dataset.p,1);desenha();};
+    rodape('','','Verificar',verificar,'',true);
+    if(CONTA.cfg.voz)fala('Monte a frase: '+it.pt,'pt-BR');
+  }else if(EX.t==='escrever'||EX.t==='ditado'){
+    const dit=EX.t==='ditado';
+    c.innerHTML=(dit?instrHtml('Escute e escreva o que ouviu, em '+CUR.min+'.')+`<div class="sons"><button onclick="ingles(EX.it.en)">🔊 Ouvir</button><button onclick="ingles(EX.it.en,true)">🐢 Devagar</button></div>`
+      :instrHtml('Escreva em '+CUR.min+':')+`<div class="frase-pt">${it.em} ${esc(it.pt)}</div>`)
+      +`<input type="text" class="grande-input" id="ex-txt" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Escreva aqui…">
+      <p class="ajuda">Não precisa se preocupar com letra maiúscula nem com ponto final.</p>
+      <button class="btn claro peq" id="ex-naosei" style="width:auto">🤷 Não sei</button>`;
+    const inp=$('#ex-txt');inp.oninput=()=>{resposta=inp.value;liberaVerificar(inp.value.trim().length>0);};
+    inp.onkeydown=e=>{if(e.key==='Enter'&&inp.value.trim())verificar();};
+    $('#ex-naosei').onclick=()=>{resposta='';verificar();};
+    rodape('','','Verificar',verificar,'',true);
+    if(dit)instrucao('Escute e escreva.',it.en);else if(CONTA.cfg.voz)fala('Escreva em '+CUR.min+': '+it.pt,'pt-BR');
+    setTimeout(()=>inp.focus(),300);
+  }else if(EX.t==='falar'){
+    c.innerHTML=instrHtml('Toque no microfone e fale em '+CUR.min+':')+`<div class="palavra"><div class="em">${it.em}</div><div class="en">${esc(it.en)}</div><div class="pt">${esc(it.pt)}</div></div>
+      <div class="sons"><button onclick="ingles(EX.it.en)">🔊 Ouvir</button><button onclick="ingles(EX.it.en,true)">🐢</button></div>
+      <button class="mic" id="ex-mic" aria-label="Falar">🎤</button><p class="centro ajuda" id="ex-ouvi">Toque no microfone, espere ficar vermelho e fale.</p>`;
+    $('#ex-mic').onclick=ouvirMicrofone;
+    rodape('','','Agora não posso falar',()=>{LC.pos++;proximo();},'');
+    instrucao('Ouça e depois fale no microfone.',it.en);
+  }
+}
+let rec=null;
+function ouvirMicrofone(){
+  if(rec){try{rec.stop();}catch(e){}return;}
+  speechSynthesis&&speechSynthesis.cancel();
+  rec=new Reconhece();rec.lang=CUR.voz;rec.interimResults=false;rec.maxAlternatives=5;
+  const mic=$('#ex-mic');mic.classList.add('ouvindo');$('#ex-ouvi').textContent='Pode falar agora…';
+  let ouviu=false;
+  rec.onresult=e=>{ouviu=true;const alts=[...e.results[0]].map(a=>a.transcript);const nota=confereFala(alts,EX.it.en);
+    $('#ex-ouvi').innerHTML='Eu ouvi: <b>'+esc(alts[0])+'</b>';resposta=alts[0];
+    if(nota>=0.6)registra(true,'Muito bem! Sua pronúncia está boa. 🎉','',true);
+    else $('#ex-ouvi').innerHTML+='<br>Quase! Toque em 🔊 para ouvir e tente de novo no 🎤.';};
+  rec.onerror=e=>{$('#ex-ouvi').textContent=e.error==='not-allowed'?'O microfone está bloqueado. Permita o microfone nas configurações do navegador.':'Não consegui ouvir. Toque no microfone e tente de novo.';};
+  rec.onend=()=>{mic.classList.remove('ouvindo');rec=null;if(!ouviu&&$('#ex-ouvi').textContent==='Pode falar agora…')$('#ex-ouvi').textContent='Não ouvi nada. Toque no microfone e fale mais alto.';};
+  try{rec.start();}catch(e){mic.classList.remove('ouvindo');rec=null;}
+}
+function verificar(){
+  if(EX.t==='leitura'){const T=EX.L.txt,ok=resposta===T.ok;
+    document.querySelectorAll('.opcoes button').forEach(b=>{if(b.dataset.o===T.ok)b.classList.add('certo');else if(b.classList.contains('sel'))b.classList.add('errado');b.disabled=true;});
+    const d=document.querySelector('#lc-corpo details');if(d)d.open=true;
+    return registra(ok,ok?elogio()+' Você entendeu a notícia!':'Ainda não. A resposta certa é:',ok?'':'<b>'+esc(T.ok)+'</b>');}
+  const it=EX.it;let ok,quase=false,certa;
+  if(EX.t==='ouvir'){certa=it.pt;ok=resposta===certa;}
+  else if(EX.t==='traduzir'){certa=it.en;ok=resposta===certa;}
+  else{certa=it.en;const n=confere(resposta||'',certa);ok=n>0;quase=n===1;}
+  document.querySelectorAll('.opcoes button').forEach(b=>{if(b.dataset.o===certa)b.classList.add('certo');else if(b.classList.contains('sel'))b.classList.add('errado');b.disabled=true;});
+  const inp=$('#ex-txt');if(inp)inp.disabled=true;
+  if(ok)registra(true,quase?'Quase perfeito!':elogio(),quase?'O certo é: <b>'+esc(certa)+'</b>':'');
+  else registra(false,'Ainda não. A resposta certa é:','<b>'+esc(EX.t==='ouvir'?it.en+' = '+it.pt:certa)+'</b>'+(EX.t!=='ouvir'?' = '+esc(it.pt):''));
+}
+const ELOGIOS=['Muito bem! 🎉','Isso aí! 👏','Certo! ⭐','Excelente! 💪','Acertou! 😀','Perfeito! ✅'];
+const elogio=()=>ELOGIOS[rnd(ELOGIOS.length)];
+function registra(ok,fb,fb2,fala_){
+  const it=EX.it;
+  if(ok){LC.acertos++;P.xp+=10;}else if(it)LC.erros.push(it);
+  LC.total++;
+  if(it){const s=P.it[it.id]||(P.it[it.id]=[0,0,0,0]);const cx=caixa(s);
+    if(ok){s[0]++;s[3]=Math.min(6,cx+1);}else{s[1]++;s[3]=0;}
+    s[2]=Date.now();}
+  if(!it){rodape(fb,fb2,'Continuar ➜',()=>{LC.pos++;proximo();},ok?'certo':'errado');return;}
+  if(!ok&&LC.tipo!=='prova'&&!LC.repetidos.has(it.id)){LC.repetidos.add(it.id);LC.fila.push({t:EX.t==='falar'?'ditado':EX.t,it,pool:EX.pool});}
+  if(ok&&!fala_)ingles(it.en);
+  rodape(fb,fb2,'Continuar ➜',()=>{LC.pos++;proximo();},ok?'certo':'errado');
+}
+
+/* ======================= FIM DA LIÇÃO ======================= */
+function terminar(){
+  $('#lc-prog').style.width='100%';$('#rodape').style.display='none';
+  const pct=LC.total?LC.acertos/LC.total:1,estrelas=pct>=0.9?3:pct>=0.7?2:1;
+  const hj=hoje();let titulo='Lição concluída!',extra='',subiu=false,passou=true;
+  if(LC.tipo==='revisao'){P.revHoje=hj;titulo='Revisão concluída!';}
+  else{
+    if(LC.tipo==='prova'&&pct<0.7){passou=false;titulo='Quase lá!';extra=`<p>Você acertou ${Math.round(pct*100)}%. Para passar de nível, precisa de 70%. Revise e tente de novo. Você consegue! 💪</p>`;}
+    if(passou){
+      P.feitas[LC.idx]=Math.max(P.feitas[LC.idx]||0,estrelas);P.xp+=20;
+      if(LC.idx===P.lic){P.lic++;subiu=LICOES[LC.idx].prova;}
+      if(P.licHoje!==hj){P.seq=P.ultimo===ontem()?P.seq+1:(P.ultimo===hj?P.seq:1);P.ultimo=hj;P.licHoje=hj;}
+    }
+  }
+  salvar();
+  const errosUnicos=[...new Map(LC.erros.map(x=>[x.id,x])).values()];
+  $('#fim-corpo').innerHTML=`<div style="font-size:4rem;margin-top:20px">${passou?'🎉':'💪'}</div><h1>${titulo}</h1>
+    <div class="estrelas">${passou?'⭐'.repeat(estrelas)+'☆'.repeat(3-estrelas):''}</div>
+    <p style="font-size:1.2rem">Você acertou <b>${LC.acertos} de ${LC.total}</b>.</p>${extra}
+    ${P.seq>1&&passou&&LC.tipo!=='revisao'?`<p>🔥 <b>${P.seq} dias seguidos</b> estudando!</p>`:''}
+    ${errosUnicos.length?`<div class="card" style="text-align:left"><b>Para treinar mais:</b><ul>${errosUnicos.map(x=>`<li>${esc(x.en)} = ${esc(x.pt)} <button class="peq" style="background:var(--azul2);min-height:34px" onclick="ingles('${x.en.replace(/'/g,"\\'")}')">🔊</button></li>`).join('')}</ul><p class="ajuda">Elas vão aparecer de novo na revisão.</p></div>`:''}
+    <button class="btn" id="fim-ok">${passou?'Continuar':'Voltar ao início'}</button>`;
+  tela('tela-fim');
+  if(CONTA.cfg.voz)fala(titulo+' Você acertou '+LC.acertos+' de '+LC.total+'.','pt-BR');
+  $('#fim-ok').onclick=()=>{inicio();
+    if(subiu&&P.lic>=TOTAL)certificado();
+    else if(subiu)modal(`<div style="font-size:3.5rem">${NIVEIS[nivelDe(P.lic)].e}</div><h2>Parabéns! Você subiu de nível!</h2><p>Agora você está no <b>Nível ${nivelDe(P.lic)+1}: ${NIVEIS[nivelDe(P.lic)].n}</b>.</p><button class="btn" onclick="fechaModal()">Oba!</button>`);};
+}
+function certificado(){
+  if(!P.certificado){P.certificado=hoje();salvar();}
+  const [a,m,d]=P.certificado.split('-');
+  modal(`<div class="cert"><div style="font-size:3rem">🏆</div><h2>Certificado</h2><p>Certificamos que</p><div class="nome">${esc(USER)}</div>
+    <p>concluiu as <b>${TOTAL} lições</b> do curso de <b>${CUR.nome}</b> do <b>Nobusão</b>, nos ${NIVEIS.length} níveis: ${NIVEIS.map(n=>n.n).join(', ')}.</p><p>${d}/${m}/${a}</p></div>
+    <button class="btn" onclick="print()">🖨️ Imprimir ou salvar</button><button class="btn claro" onclick="fechaModal()">Fechar</button>`);
+}
+/* ======================= IDIOMAS ======================= */
+const EM_BREVE=[['🇪🇸','Espanhol'],['🇫🇷','Francês'],['🇮🇹','Italiano']];
+function telaIdiomas(){
+  let h='';
+  Object.entries(CURSOS).forEach(([k,c])=>{const p=CONTA.cursos[k];const nv=p?Math.min(c.niveis.length-1,Math.floor(Math.min(p.lic,c.licoes.length-1)/POR_NIVEL)):0;
+    h+=`<button class="idioma ${k===CONTA.idioma?'atual':''}" data-k="${k}"><span class="bd">${c.bandeira}</span><span class="tx"><b>${c.nome}</b><small>${p?(p.lic>=c.licoes.length?'Curso concluído 🏆':'Nível '+(nv+1)+' · lição '+(p.lic+1)+' de '+c.licoes.length):c.licoes.length+' lições · '+c.niveis.length+' níveis'}</small></span><span>${k===CONTA.idioma?'✔':'▶'}</span></button>`;});
+  EM_BREVE.forEach(([b,n])=>{h+=`<div class="idioma breve"><span class="bd">${b}</span><span class="tx"><b>${n}</b><small>Em breve</small></span><span>🔒</span></div>`;});
+  $('#id-lista').innerHTML=h;tela('tela-idiomas');
+}
+$('#id-lista').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;abreCurso(b.dataset.k);salvar();inicio();};
+$('#id-voltar').onclick=()=>inicio();
+$('#ini-idioma').onclick=telaIdiomas;
+function trocaTema(){const t=document.documentElement.dataset.tema==='escuro'?'claro':'escuro';document.documentElement.dataset.tema=t;try{localStorage.setItem('nb_tema',t);}catch(e){}iconeTema();}
+function iconeTema(){const esc_=document.documentElement.dataset.tema==='escuro';document.querySelectorAll('.tema').forEach(b=>{b.textContent=esc_?'☀️':'🌙';b.setAttribute('aria-label',esc_?'Modo claro':'Modo noturno');});}
+iconeTema();
+
+function modal(h){$('#modal-corpo').innerHTML=h;$('#modal').classList.add('on');}
+function fechaModal(){$('#modal').classList.remove('on');}
+
+/* ======================= ABRIR JÁ LOGADO ======================= */
+(function(){let s=null;try{s=JSON.parse(localStorage.getItem('nb_sessao')||'null');}catch(e){}
+  usaCurso('en');
+  if(s&&s.n){$('#lg-nome').value=s.n;USER=s.n;SENHA=s.s;
+    let local=null;try{local=JSON.parse(localStorage.getItem(chaveLocal(USER))||'null');}catch(e){}
+    CONTA=normalizaConta(local);abreCurso(CONTA.idioma);inicio();
+    if(SERVIDOR_URL)servidor({acao:'entrar',nome:USER,senha:SENHA}).then(r=>{
+      if(r&&r.ok&&r.progresso){CONTA=normalizaConta(melhorConta(r.progresso,CONTA));abreCurso(CONTA.idioma);salvaLocal();if($('#tela-inicio').classList.contains('on'))inicio();}
+      else if(r&&r.sair){localStorage.removeItem('nb_sessao');USER='';P=null;CONTA=null;tela('tela-login');msg('#lg-msg',r.erro||'Entre de novo.','erro');}
+    }).catch(()=>{});
+  }})();
+</script>
+</body>
+</html>
